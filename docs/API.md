@@ -53,11 +53,11 @@ API digunakan untuk mengelola:
 
 Development:
 
-http://localhost:3000/api/v1
+`http://localhost:3000/api/v1`
 
 Production:
 
-https://mas.example.mil.id/api/v1
+`https://mas.example.mil.id/api/v1`
 
 ### 2.2 HTTP Methods
 
@@ -71,6 +71,7 @@ https://mas.example.mil.id/api/v1
 
 ### 2.3 Format Respons Sukses
 
+```json
 {
   "success": true,
   "message": "Data berhasil diambil",
@@ -78,9 +79,11 @@ https://mas.example.mil.id/api/v1
   "meta": null,
   "requestId": "REQUEST-UUID"
 }
+```
 
 ### 2.4 Format Respons Error
 
+```json
 {
   "success": false,
   "message": "Data tidak ditemukan",
@@ -92,6 +95,7 @@ https://mas.example.mil.id/api/v1
   "path": "/api/v1/users/123",
   "requestId": "REQUEST-UUID"
 }
+```
 
 ### 2.5 HTTP Status Code
 
@@ -113,10 +117,11 @@ https://mas.example.mil.id/api/v1
 
 Endpoint list menggunakan parameter:
 
-?page=1&limit=20&search=andi&sortBy=createdAt&sortOrder=desc
+`?page=1&limit=20&search=andi&sortBy=createdAt&sortOrder=desc`
 
 Response:
 
+```json
 {
   "success": true,
   "message": "Data berhasil diambil",
@@ -128,27 +133,29 @@ Response:
     "totalPages": 5
   }
 }
+```
 
 ### 2.7 Authentication Header
 
 Endpoint yang membutuhkan autentikasi menggunakan:
 
-Authorization: Bearer <access_token>
+`Authorization: Bearer <access_token>`
 
 ---
 
 ## 3. Authentication & Identity API
 
-Base path: "/auth"
+Base path: `"/auth"`
 
 ### 3.1 Login
 
-POST "/auth/login"
+`POST "/auth/login"`
 
 Mengautentikasi pengguna menggunakan NRP atau username dan PIN.
 
 Request:
 
+```json
 {
   "identity": "12345678",
   "pin": "123456",
@@ -159,9 +166,11 @@ Request:
     "appVersion": "1.0.0"
   }
 }
+```
 
 Response:
 
+```json
 {
   "success": true,
   "message": "Login berhasil",
@@ -190,6 +199,7 @@ Response:
     }
   }
 }
+```
 
 Catatan:
 
@@ -201,16 +211,19 @@ Catatan:
 
 ### 3.2 Refresh Token
 
-POST "/auth/refresh"
+`POST "/auth/refresh"`
 
 Request:
 
+```json
 {
   "refreshToken": "JWT_REFRESH_TOKEN"
 }
+```
 
 Response:
 
+```json
 {
   "success": true,
   "message": "Token berhasil diperbarui",
@@ -220,30 +233,35 @@ Response:
     "expiresIn": 900
   }
 }
+```
 
 Gunakan refresh token rotation dan invalidasi token lama setelah berhasil digunakan.
 
 ### 3.3 Logout
 
-POST "/auth/logout"
+`POST "/auth/logout"`
 
 Request:
 
+```json
 {
   "refreshToken": "JWT_REFRESH_TOKEN"
 }
+```
 
 Response:
 
+```json
 {
   "success": true,
   "message": "Logout berhasil",
   "data": null
 }
+```
 
 ### 3.4 Logout All Devices
 
-POST "/auth/logout-all"
+`POST "/auth/logout-all"`
 
 Mengakhiri seluruh sesi aktif pengguna.
 
@@ -253,10 +271,11 @@ auth.session.revoke.all
 
 ### 3.5 Get Current User
 
-GET "/users/me"
+`GET "/users/me"`
 
 Response:
 
+```json
 {
   "success": true,
   "data": {
@@ -272,17 +291,20 @@ Response:
     "permissions": []
   }
 }
+```
 
-3.6 Change PIN
+### 3.6 Change PIN
 
-PATCH "/auth/change-pin"
+`PATCH "/auth/change-pin"`
 
 Request:
 
+```json
 {
   "currentPin": "123456",
   "newPin": "654321"
 }
+```
 
 Permission:
 
@@ -290,7 +312,7 @@ auth.pin.change
 
 ### 3.7 Reset PIN Pengguna
 
-POST "/users/:id/reset-pin"
+`POST "/users/:id/reset-pin"`
 
 Reset PIN oleh administrator harus mengikuti kebijakan verifikasi identitas dan otorisasi. Pengguna yang ingin mengganti PIN sendiri menggunakan `PATCH /auth/change-pin`. API tidak boleh mengembalikan PIN lama atau PIN baru.
 
@@ -298,7 +320,7 @@ Reset PIN oleh administrator harus mengikuti kebijakan verifikasi identitas dan 
 
 ## 4. Dynamic RBAC API
 
-Base path: "/roles", "/permissions", "/users"
+Base path: `"/roles"`, "/permissions", "/users"
 
 Hanya SUPER_ADMIN yang dapat mengelola definisi role dan permission sistem.
 
@@ -309,17 +331,17 @@ Role awal:
 
 Role lainnya dibuat secara dinamis oleh SUPER_ADMIN.
 
-4.1 Get Roles
+### 4.1 Get Roles
 
-GET "/roles"
+`GET "/roles"`
 
 Permission:
 
 rbac.role.view
 
-4.2 Create Role
+### 4.2 Create Role
 
-POST "/roles"
+`POST "/roles"`
 
 Permission:
 
@@ -327,16 +349,18 @@ rbac.role.create
 
 Request:
 
+```json
 {
   "name": "ADMIN_SATUAN",
   "displayName": "Administrator Satuan",
   "description": "Mengelola administrasi satuan",
   "isActive": true
 }
+```
 
-4.3 Update Role
+### 4.3 Update Role
 
-PATCH "/roles/:id"
+`PATCH "/roles/:id"`
 
 Permission:
 
@@ -344,17 +368,19 @@ rbac.role.update
 
 Request:
 
+```json
 {
   "displayName": "Administrator Satuan",
   "description": "Mengelola data satuan",
   "isActive": true
 }
+```
 
 Role sistem yang dilindungi tidak boleh dihapus atau dinonaktifkan melalui mekanisme pengelolaan role biasa.
 
-4.4 Delete Role
+### 4.4 Delete Role
 
-DELETE "/roles/:id"
+`DELETE "/roles/:id"`
 
 Permission:
 
@@ -362,26 +388,28 @@ rbac.role.delete
 
 Penghapusan role harus ditolak apabila role masih digunakan, kecuali tersedia mekanisme migrasi assignment yang aman.
 
-4.5 Get Permissions
+### 4.5 Get Permissions
 
-GET "/permissions"
+`GET "/permissions"`
 
 Permission:
 
 rbac.permission.view
 
-4.6 Create Permission
+### 4.6 Create Permission
 
-POST "/permissions"
+`POST "/permissions"`
 
 Request:
 
+```json
 {
   "key": "attendance.monitor",
   "module": "attendance",
   "displayName": "Monitoring Kehadiran",
   "description": "Melihat monitoring kehadiran personel"
 }
+```
 
 Contoh permission:
 
@@ -424,27 +452,30 @@ rbac.role.delete
 rbac.permission.view
 rbac.permission.assign
 
-4.7 Assign Permissions to Role
+### 4.7 Assign Permissions to Role
 
-PUT "/roles/:id/permissions"
+`PUT "/roles/:id/permissions"`
 
 Request:
 
+```json
 {
   "permissionIds": [
     "permission-uuid-1",
     "permission-uuid-2"
   ]
 }
+```
 
 Proses ini mengganti daftar permission role secara keseluruhan. Jika hanya ingin menambah atau menghapus sebagian permission, gunakan endpoint terpisah atau PATCH action yang didefinisikan secara eksplisit.
 
-4.8 Assign Role to User
+### 4.8 Assign Role to User
 
-POST "/users/:id/roles"
+`POST "/users/:id/roles"`
 
 Request:
 
+```json
 {
   "roleId": "role-uuid",
   "scope": {
@@ -453,27 +484,30 @@ Request:
     "unitId": "unit-uuid"
   }
 }
+```
 
-4.9 Remove Role from User
+### 4.9 Remove Role from User
 
-DELETE "/users/:userId/roles/:roleId"
+`DELETE "/users/:userId/roles/:roleId"`
 
-4.10 Get User Roles
+### 4.10 Get User Roles
 
-GET "/users/:id/roles"
+`GET "/users/:id/roles"`
 
-4.11 Assign Direct Permission
+### 4.11 Assign Direct Permission
 
-POST "/users/:id/permissions"
+`POST "/users/:id/permissions"`
 
 Digunakan hanya jika kebijakan Dynamic RBAC mengizinkan permission langsung pada pengguna.
 
 Request:
 
+```json
 {
   "permissionId": "permission-uuid",
   "effect": "ALLOW"
 }
+```
 
 Setiap perubahan RBAC harus diaudit dan mengakibatkan invalidasi cache permission terkait.
 
@@ -481,32 +515,34 @@ Setiap perubahan RBAC harus diaudit dan mengakibatkan invalidasi cache permissio
 
 ## 5. User Management API
 
-Base path: "/users"
+Base path: `"/users"`
 
-5.1 Get Users
+### 5.1 Get Users
 
-GET "/users"
+`GET "/users"`
 
 Query:
 
-?page=1&limit=20&search=andi&accountType=MILITARY&isActive=true
+`?page=1&limit=20&search=andi&accountType=MILITARY&isActive=true`
 
 Permission:
 
 user.view
 
-5.2 Create User
+### 5.2 Create User
 
-POST "/users"
+`POST "/users"`
 
 Request:
 
+```json
 {
   "username": "12345678",
   "pin": "123456",
   "accountType": "MILITARY",
   "isActive": true
 }
+```
 
 Catatan:
 
@@ -515,21 +551,21 @@ Catatan:
 - Akun SYSTEM dapat tidak mempunyai profil personel.
 - Pembuatan akun dan profil terkait harus dilakukan secara transaksional.
 
-5.3 Get User Detail
+### 5.3 Get User Detail
 
-GET "/users/:id"
+`GET "/users/:id"`
 
-5.4 Update User
+### 5.4 Update User
 
-PATCH "/users/:id"
+`PATCH "/users/:id"`
 
-5.5 Deactivate User
+### 5.5 Deactivate User
 
-PATCH "/users/:id/deactivate"
+`PATCH "/users/:id/deactivate"`
 
-5.6 Activate User
+### 5.6 Activate User
 
-PATCH "/users/:id/activate"
+`PATCH "/users/:id/activate"`
 
 SUPER_ADMIN tidak boleh dinonaktifkan melalui endpoint biasa. Perubahan akun SUPER_ADMIN harus mempunyai prosedur keamanan khusus dan audit.
 
@@ -537,26 +573,27 @@ SUPER_ADMIN tidak boleh dinonaktifkan melalui endpoint biasa. Perubahan akun SUP
 
 ## 6. Military Personnel API
 
-Base path: "/personnel"
+Base path: `"/personnel"`
 
-6.1 Get Personnel
+### 6.1 Get Personnel
 
-GET "/personnel"
+`GET "/personnel"`
 
 Query:
 
-?page=1&limit=20&search=12345678&unitId=uuid&status=ACTIVE
+`?page=1&limit=20&search=12345678&unitId=uuid&status=ACTIVE`
 
 Permission:
 
 personnel.view
 
-6.2 Create Personnel
+### 6.2 Create Personnel
 
-POST "/personnel"
+`POST "/personnel"`
 
 Request:
 
+```json
 {
   "user": {
     "username": "12345678",
@@ -571,27 +608,29 @@ Request:
     "status": "ACTIVE"
   }
 }
+```
 
 Backend harus membuat User dan MilitaryPersonnel dalam satu transaksi.
 
-6.3 Get Personnel Detail
+### 6.3 Get Personnel Detail
 
-GET "/personnel/:id"
+`GET "/personnel/:id"`
 
-6.4 Update Personnel
+### 6.4 Update Personnel
 
-PATCH "/personnel/:id"
+`PATCH "/personnel/:id"`
 
-6.5 Get Personnel History
+### 6.5 Get Personnel History
 
-GET "/personnel/:id/history"
+`GET "/personnel/:id/history"`
 
-6.6 Change Personnel Organization
+### 6.6 Change Personnel Organization
 
-POST "/personnel/:id/organization-assignment"
+`POST "/personnel/:id/organization-assignment"`
 
 Request:
 
+```json
 {
   "organizationId": "organization-uuid",
   "unitId": "unit-uuid",
@@ -599,6 +638,7 @@ Request:
   "effectiveAt": "2026-11-05T00:00:00.000Z",
   "reason": "Mutasi satuan"
 }
+```
 
 Perubahan organisasi harus mempertahankan riwayat penempatan sebelumnya.
 
@@ -606,20 +646,21 @@ Perubahan organisasi harus mempertahankan riwayat penempatan sebelumnya.
 
 ## 7. Persit Management API
 
-Base path: "/persit"
+Base path: `"/persit"`
 
 Persit merupakan pengguna independen dengan akun dan PIN sendiri.
 
-7.1 Get Persit Members
+### 7.1 Get Persit Members
 
-GET "/persit"
+`GET "/persit"`
 
-7.2 Create Persit Member
+### 7.2 Create Persit Member
 
-POST "/persit"
+`POST "/persit"`
 
 Request:
 
+```json
 {
   "user": {
     "username": "PERSIT-0001",
@@ -635,33 +676,36 @@ Request:
     "relationshipType": "SPOUSE"
   }
 }
+```
 
-7.3 Get Persit Detail
+### 7.3 Get Persit Detail
 
-GET "/persit/:id"
+`GET "/persit/:id"`
 
-7.4 Update Persit
+### 7.4 Update Persit
 
-PATCH "/persit/:id"
+`PATCH "/persit/:id"`
 
-7.5 Get Persit History
+### 7.5 Get Persit History
 
-GET "/persit/:id/history"
+`GET "/persit/:id/history"`
 
-7.6 Link Persit to Military Personnel
+### 7.6 Link Persit to Military Personnel
 
-POST "/persit/:id/family-relationships"
+`POST "/persit/:id/family-relationships"`
 
 Request:
 
+```json
 {
   "militaryPersonnelId": "personnel-uuid",
   "relationshipType": "SPOUSE"
 }
+```
 
-7.7 Remove Family Relationship
+### 7.7 Remove Family Relationship
 
-DELETE "/persit/:id/family-relationships/:relationshipId"
+`DELETE "/persit/:id/family-relationships/:relationshipId"`
 
 Penghapusan hubungan keluarga tidak menghapus akun atau riwayat kehadiran Persit.
 
@@ -669,9 +713,9 @@ Penghapusan hubungan keluarga tidak menghapus akun atau riwayat kehadiran Persit
 
 ## 8. Organization Management API
 
-Base path: "/organizations"
+Base path: `"/organizations"`
 
-8.1 Organizations
+### 8.1 Organizations
 
 | Method | Endpoint | Fungsi |
 | --- | --- | --- |
@@ -681,9 +725,9 @@ GET| "/organizations/:id"| Detail organisasi
 PATCH| "/organizations/:id"| Update organisasi
 DELETE| "/organizations/:id"| Menonaktifkan organisasi
 
-8.2 Units
+### 8.2 Units
 
-Base path: "/units"
+Base path: `"/units"`
 
 | Method | Endpoint | Fungsi |
 | --- | --- | --- |
@@ -693,9 +737,9 @@ GET| "/units/:id"| Detail satuan
 PATCH| "/units/:id"| Update satuan
 DELETE| "/units/:id"| Menonaktifkan satuan
 
-8.3 Barracks
+### 8.3 Barracks
 
-Base path: "/barracks"
+Base path: `"/barracks"`
 
 | Method | Endpoint | Fungsi |
 | --- | --- | --- |
@@ -711,18 +755,19 @@ Semua endpoint organisasi wajib menerapkan organizational scope sesuai role peng
 
 ## 9. Checkpoint Management API
 
-Base path: "/checkpoints"
+Base path: `"/checkpoints"`
 
-9.1 Get Checkpoints
+### 9.1 Get Checkpoints
 
-GET "/checkpoints"
+`GET "/checkpoints"`
 
-9.2 Create Checkpoint
+### 9.2 Create Checkpoint
 
-POST "/checkpoints"
+`POST "/checkpoints"`
 
 Request:
 
+```json
 {
   "code": "POS-001",
   "name": "Pos Jaga Utama",
@@ -734,19 +779,21 @@ Request:
   "unitId": "unit-uuid",
   "status": "ACTIVE"
 }
+```
 
 Nilai radius dan akurasi di atas hanya contoh konfigurasi, bukan nilai baku sistem.
 
-9.3 Get Checkpoint Detail
+### 9.3 Get Checkpoint Detail
 
-GET "/checkpoints/:id"
+`GET "/checkpoints/:id"`
 
-9.4 Update Checkpoint
+### 9.4 Update Checkpoint
 
-PATCH "/checkpoints/:id"
+`PATCH "/checkpoints/:id"`
 
 Request:
 
+```json
 {
   "name": "Pos Jaga Utama",
   "latitude": -7.4241000,
@@ -754,16 +801,17 @@ Request:
   "radiusMeter": 60,
   "accuracyLimitMeter": 20
 }
+```
 
 Perubahan koordinat atau geofence tidak memerlukan regenerasi QR.
 
-9.5 Deactivate Checkpoint
+### 9.5 Deactivate Checkpoint
 
-PATCH "/checkpoints/:id/deactivate"
+`PATCH "/checkpoints/:id/deactivate"`
 
-9.6 Get Checkpoint QR
+### 9.6 Get Checkpoint QR
 
-GET "/checkpoints/:id/qr"
+`GET "/checkpoints/:id/qr"`
 
 Mengambil informasi QR aktif tanpa mengembalikan token mentah.
 
@@ -771,13 +819,13 @@ Mengambil informasi QR aktif tanpa mengembalikan token mentah.
 
 ## 10. QR Code Management API
 
-Base path: "/checkpoints/:id/qr"
+Base path: `"/checkpoints/:id/qr"`
 
 QR bersifat statis dan satu QR aktif digunakan bersama oleh Prajurit dan Persit pada checkpoint yang sama.
 
-10.1 Generate QR
+### 10.1 Generate QR
 
-POST "/checkpoints/:id/qr"
+`POST "/checkpoints/:id/qr"`
 
 Permission:
 
@@ -785,12 +833,15 @@ checkpoint.qr.generate
 
 Request:
 
+```json
 {
   "reason": "Pembuatan QR checkpoint baru"
 }
+```
 
 Response:
 
+```json
 {
   "success": true,
   "message": "QR berhasil dibuat",
@@ -802,19 +853,20 @@ Response:
     "pdfUrl": "/api/v1/checkpoints/checkpoint-uuid/qr/pdf"
   }
 }
+```
 
 Token QR harus dihasilkan menggunakan random cryptographically secure generator dengan entropi tinggi. Database menyimpan hash token, bukan token mentah.
 
 QR yang dicetak memuat token checkpoint, bukan NRP, PIN, atau data pribadi.
 
-10.2 Download QR PDF
+### 10.2 Download QR PDF
 
-GET "/checkpoints/:id/qr/pdf"
+`GET "/checkpoints/:id/qr/pdf"`
 
 Response:
 
-Content-Type: application/pdf
-Content-Disposition: attachment; filename="checkpoint-POS-001.pdf"
+`Content-Type: application/pdf`
+`Content-Disposition: attachment; filename="checkpoint-POS-001.pdf"`
 
 PDF berisi:
 
@@ -824,19 +876,21 @@ PDF berisi:
 - Instruksi penggunaan
 - Informasi identifikasi versi QR
 
-10.3 Revoke QR
+### 10.3 Revoke QR
 
-POST "/checkpoints/:id/qr/revoke"
+`POST "/checkpoints/:id/qr/revoke"`
 
 Request:
 
+```json
 {
   "reason": "QR rusak atau terindikasi bocor"
 }
+```
 
-10.4 Regenerate QR
+### 10.4 Regenerate QR
 
-POST "/checkpoints/:id/qr/regenerate"
+`POST "/checkpoints/:id/qr/regenerate"`
 
 Proses harus dilakukan secara transaksional:
 
@@ -849,14 +903,15 @@ Proses harus dilakukan secara transaksional:
 
 Harus selalu terdapat maksimal satu QR aktif per checkpoint.
 
-10.5 Validate QR
+### 10.5 Validate QR
 
-GET "/checkpoints/qr/:token"
+`GET "/checkpoints/qr/:token"`
 
 Endpoint ini dapat diakses tanpa login untuk menampilkan informasi checkpoint yang aman.
 
 Response:
 
+```json
 {
   "success": true,
   "data": {
@@ -869,6 +924,7 @@ Response:
     "qrStatus": "ACTIVE"
   }
 }
+```
 
 Jangan mengembalikan koordinat internal, token hash, atau informasi sensitif checkpoint melalui endpoint publik ini.
 
@@ -876,11 +932,11 @@ Jangan mengembalikan koordinat internal, token hash, atau informasi sensitif che
 
 ## 11. Attendance Management API
 
-Base path: "/attendance"
+Base path: `"/attendance"`
 
-11.1 Scan QR dan Catat Kehadiran
+### 11.1 Scan QR dan Catat Kehadiran
 
-POST "/attendance/scan"
+`POST "/attendance/scan"`
 
 <mark>Endpoint utama sistem.</mark>
 
@@ -892,6 +948,7 @@ attendance.scan
 
 Request:
 
+```json
 {
   "qrToken": "RANDOM_CHECKPOINT_TOKEN",
   "latitude": -7.4240000,
@@ -900,6 +957,7 @@ Request:
   "deviceId": "DEVICE-001",
   "idempotencyKey": "UNIQUE-REQUEST-ID"
 }
+```
 
 Backend menjalankan proses:
 
@@ -923,6 +981,7 @@ Frontend tidak boleh menentukan sendiri jenis transaksi.
 
 Response EXIT:
 
+```json
 {
   "success": true,
   "message": "Berhasil melakukan EXIT",
@@ -945,9 +1004,11 @@ Response EXIT:
     }
   }
 }
+```
 
 Response RETURN:
 
+```json
 {
   "success": true,
   "message": "Berhasil melakukan RETURN",
@@ -970,6 +1031,7 @@ Response RETURN:
     }
   }
 }
+```
 
 Aturan penting:
 
@@ -984,12 +1046,13 @@ Aturan penting:
 - Bila GPS tidak akurat, transaksi ditolak atau pengguna diminta mengambil lokasi kembali.
 - Browser GPS bukan bukti mutlak terhadap spoofing; sistem tetap mencatat metadata risiko dan anomali.
 
-11.2 Get My Attendance Status
+### 11.2 Get My Attendance Status
 
-GET "/attendance/my-status"
+`GET "/attendance/my-status"`
 
 Response:
 
+```json
 {
   "success": true,
   "data": {
@@ -1001,6 +1064,7 @@ Response:
     "deadlineAt": "2026-11-05T10:00:00.000Z"
   }
 }
+```
 
 Presence status dihitung dari sesi dan kebijakan:
 
@@ -1014,16 +1078,17 @@ Session status hanya menggunakan:
 OPEN
 CLOSED
 
-11.3 Get My Attendance History
+### 11.3 Get My Attendance History
 
-GET "/attendance/my-history"
+`GET "/attendance/my-history"`
 
 Query:
 
-?page=1&limit=20&startDate=2026-11-01&endDate=2026-11-30
+`?page=1&limit=20&startDate=2026-11-01&endDate=2026-11-30`
 
 Response:
 
+```json
 {
   "success": true,
   "data": [
@@ -1051,16 +1116,17 @@ Response:
     "totalPages": 1
   }
 }
+```
 
-11.4 Get Attendance Detail
+### 11.4 Get Attendance Detail
 
-GET "/attendance/sessions/:sessionId"
+`GET "/attendance/sessions/:sessionId"`
 
 Pengguna hanya dapat melihat sesi sendiri kecuali memiliki permission monitoring yang sesuai.
 
-11.5 Get Attendance Monitoring
+### 11.5 Get Attendance Monitoring
 
-GET "/attendance/monitoring"
+`GET "/attendance/monitoring"`
 
 Permission:
 
@@ -1068,23 +1134,11 @@ attendance.monitor
 
 Query:
 
-?unitId=uuid&presenceStatus=OUTSIDE&profileType=MILITARY&page=1&limit=20
+`?unitId=uuid&presenceStatus=OUTSIDE&profileType=MILITARY&page=1&limit=20`
 
-11.6 Get Attendance Events
+### 11.6 Get Attendance Events
 
-GET "/attendance/events"
-
-Permission:
-
-attendance.view.all
-
-Query:
-
-?startDate=2026-11-01&endDate=2026-11-30&eventType=EXIT&checkpointId=uuid
-
-11.7 Attendance Summary
-
-GET "/attendance/summary"
+`GET "/attendance/events"`
 
 Permission:
 
@@ -1092,7 +1146,19 @@ attendance.view.all
 
 Query:
 
-?date=2026-11-05&unitId=uuid
+`?startDate=2026-11-01&endDate=2026-11-30&eventType=EXIT&checkpointId=uuid`
+
+### 11.7 Attendance Summary
+
+`GET "/attendance/summary"`
+
+Permission:
+
+attendance.view.all
+
+Query:
+
+`?date=2026-11-05&unitId=uuid`
 
 ---
 
@@ -1102,9 +1168,9 @@ Data event kehadiran tidak boleh diubah langsung.
 
 Koreksi harus disimpan sebagai record terpisah.
 
-12.1 Create Correction Request
+### 12.1 Create Correction Request
 
-POST "/attendance/corrections"
+`POST "/attendance/corrections"`
 
 Permission:
 
@@ -1112,6 +1178,7 @@ attendance.correction.create
 
 Request:
 
+```json
 {
   "attendanceEventId": "event-uuid",
   "requestedValue": {
@@ -1120,18 +1187,19 @@ Request:
   },
   "reason": "Kesalahan pencatatan waktu"
 }
+```
 
-12.2 Get Correction Requests
+### 12.2 Get Correction Requests
 
-GET "/attendance/corrections"
+`GET "/attendance/corrections"`
 
 Permission:
 
 attendance.correction.view
 
-12.3 Approve Correction
+### 12.3 Approve Correction
 
-POST "/attendance/corrections/:id/approve"
+`POST "/attendance/corrections/:id/approve"`
 
 Permission:
 
@@ -1139,20 +1207,24 @@ attendance.correction.approve
 
 Request:
 
+```json
 {
   "decision": "APPROVE",
   "notes": "Disetujui berdasarkan bukti pendukung"
 }
+```
 
-12.4 Reject Correction
+### 12.4 Reject Correction
 
-POST "/attendance/corrections/:id/reject"
+`POST "/attendance/corrections/:id/reject"`
 
 Request:
 
+```json
 {
   "reason": "Bukti pendukung tidak mencukupi"
 }
+```
 
 Approval harus dilakukan oleh pengguna yang berwenang dan tidak boleh dilakukan oleh pemohon sendiri apabila kebijakan separation of duties diterapkan.
 
@@ -1160,18 +1232,19 @@ Approval harus dilakukan oleh pengguna yang berwenang dan tidak boleh dilakukan 
 
 ## 13. Attendance Policy API
 
-Base path: "/attendance-policies"
+Base path: `"/attendance-policies"`
 
-13.1 Get Policies
+### 13.1 Get Policies
 
-GET "/attendance-policies"
+`GET "/attendance-policies"`
 
-13.2 Create Policy
+### 13.2 Create Policy
 
-POST "/attendance-policies"
+`POST "/attendance-policies"`
 
 Request:
 
+```json
 {
   "name": "Kebijakan Kehadiran Satuan",
   "organizationId": "organization-uuid",
@@ -1181,18 +1254,19 @@ Request:
   "returnDeadline": "17:00",
   "isActive": true
 }
+```
 
-13.3 Update Policy
+### 13.3 Update Policy
 
-PATCH "/attendance-policies/:id"
+`PATCH "/attendance-policies/:id"`
 
-13.4 Get Effective Policy
+### 13.4 Get Effective Policy
 
-GET "/attendance-policies/effective"
+`GET "/attendance-policies/effective"`
 
 Query:
 
-?profileType=MILITARY
+`?profileType=MILITARY`
 
 Kebijakan dapat berbeda berdasarkan organisasi, satuan, atau tipe profil. Aturan prioritas ketika beberapa policy berlaku harus ditetapkan secara eksplisit.
 
@@ -1200,32 +1274,34 @@ Kebijakan dapat berbeda berdasarkan organisasi, satuan, atau tipe profil. Aturan
 
 ## 14. User Device API
 
-Base path: "/devices"
+Base path: `"/devices"`
 
-14.1 Register Device
+### 14.1 Register Device
 
-POST "/devices"
+`POST "/devices"`
 
 Request:
 
+```json
 {
   "deviceId": "DEVICE-001",
   "deviceName": "Samsung Galaxy A54",
   "platform": "ANDROID",
   "appVersion": "1.0.0"
 }
+```
 
-14.2 Get My Devices
+### 14.2 Get My Devices
 
-GET "/devices/my"
+`GET "/devices/my"`
 
-14.3 Revoke Device
+### 14.3 Revoke Device
 
-DELETE "/devices/:id"
+`DELETE "/devices/:id"`
 
-14.4 Get User Devices
+### 14.4 Get User Devices
 
-GET "/users/:id/devices"
+`GET "/users/:id/devices"`
 
 Permission:
 
@@ -1237,11 +1313,11 @@ Device ID yang dikirim frontend bukan bukti identitas perangkat yang tidak dapat
 
 ## 15. Dashboard API
 
-Base path: "/dashboard"
+Base path: `"/dashboard"`
 
-15.1 Dashboard Overview
+### 15.1 Dashboard Overview
 
-GET "/dashboard/overview"
+`GET "/dashboard/overview"`
 
 Permission:
 
@@ -1249,6 +1325,7 @@ dashboard.view
 
 Response:
 
+```json
 {
   "success": true,
   "data": {
@@ -1261,66 +1338,67 @@ Response:
     "todayReturn": 100
   }
 }
+```
 
 Angka di atas merupakan data contoh.
 
-15.2 Attendance by Unit
+### 15.2 Attendance by Unit
 
-GET "/dashboard/attendance-by-unit"
+`GET "/dashboard/attendance-by-unit"`
 
-15.3 Attendance Trend
+### 15.3 Attendance Trend
 
-GET "/dashboard/attendance-trend"
+`GET "/dashboard/attendance-trend"`
 
 Query:
 
-?period=7d
+`?period=7d`
 
-15.4 Checkpoint Activity
+### 15.4 Checkpoint Activity
 
-GET "/dashboard/checkpoint-activity"
+`GET "/dashboard/checkpoint-activity"`
 
-15.5 Security Overview
+### 15.5 Security Overview
 
-GET "/dashboard/security-overview"
+`GET "/dashboard/security-overview"`
 
 ---
 
 ## 16. Reporting API
 
-Base path: "/reports"
+Base path: `"/reports"`
 
-16.1 Attendance Report
+### 16.1 Attendance Report
 
-GET "/reports/attendance"
-
-Query:
-
-?startDate=2026-11-01&endDate=2026-11-30&unitId=uuid
-
-16.2 Personnel Report
-
-GET "/reports/personnel"
-
-16.3 Persit Report
-
-GET "/reports/persit"
-
-16.4 Overdue Report
-
-GET "/reports/overdue"
-
-16.5 Checkpoint Activity Report
-
-GET "/reports/checkpoint-activity"
-
-16.6 Export Report
-
-GET "/reports/attendance/export"
+`GET "/reports/attendance"`
 
 Query:
 
-?format=xlsx&startDate=2026-11-01&endDate=2026-11-30
+`?startDate=2026-11-01&endDate=2026-11-30&unitId=uuid`
+
+### 16.2 Personnel Report
+
+`GET "/reports/personnel"`
+
+### 16.3 Persit Report
+
+`GET "/reports/persit"`
+
+### 16.4 Overdue Report
+
+`GET "/reports/overdue"`
+
+### 16.5 Checkpoint Activity Report
+
+`GET "/reports/checkpoint-activity"`
+
+### 16.6 Export Report
+
+`GET "/reports/attendance/export"`
+
+Query:
+
+`?format=xlsx&startDate=2026-11-01&endDate=2026-11-30`
 
 Format yang dapat disediakan:
 
@@ -1334,45 +1412,49 @@ Export wajib mengikuti organizational scope dan permission pengguna.
 
 ## 17. Security & Anomaly Detection API
 
-Base path: "/security"
+Base path: `"/security"`
 
-17.1 Get Security Events
+### 17.1 Get Security Events
 
-GET "/security/events"
+`GET "/security/events"`
 
 Permission:
 
 security.event.view
 
-17.2 Get Security Incidents
+### 17.2 Get Security Incidents
 
-GET "/security/incidents"
+`GET "/security/incidents"`
 
-17.3 Get Incident Detail
+### 17.3 Get Incident Detail
 
-GET "/security/incidents/:id"
+`GET "/security/incidents/:id"`
 
-17.4 Update Incident Status
+### 17.4 Update Incident Status
 
-PATCH "/security/incidents/:id"
+`PATCH "/security/incidents/:id"`
 
 Request:
 
+```json
 {
   "status": "INVESTIGATING",
   "notes": "Sedang dilakukan pemeriksaan"
 }
+```
 
-17.5 Add Incident Action
+### 17.5 Add Incident Action
 
-POST "/security/incidents/:id/actions"
+`POST "/security/incidents/:id/actions"`
 
 Request:
 
+```json
 {
   "action": "ACCOUNT_REVIEW",
   "description": "Pemeriksaan aktivitas akun"
 }
+```
 
 Contoh kondisi yang dapat memicu security event:
 
@@ -1391,11 +1473,11 @@ Sinyal tersebut merupakan indikator risiko, bukan bukti otomatis adanya pelangga
 
 ## 18. Audit API
 
-Base path: "/audit"
+Base path: `"/audit"`
 
-18.1 Get Audit Logs
+### 18.1 Get Audit Logs
 
-GET "/audit/logs"
+`GET "/audit/logs"`
 
 Permission:
 
@@ -1403,17 +1485,17 @@ audit.view
 
 Query:
 
-?actorId=uuid&module=attendance&startDate=2026-11-01&endDate=2026-11-30
+`?actorId=uuid&module=attendance&startDate=2026-11-01&endDate=2026-11-30`
 
-18.2 Get Audit Detail
+### 18.2 Get Audit Detail
 
-GET "/audit/logs/:id"
+`GET "/audit/logs/:id"`
 
 Audit log harus melindungi integritas data dan tidak dapat diedit melalui API biasa.
 
-18.3 Get Access Audit Logs
+### 18.3 Get Access Audit Logs
 
-GET "/audit/access-logs"
+`GET "/audit/access-logs"`
 
 Digunakan untuk melihat aktivitas login, logout, kegagalan autentikasi, dan perubahan akses.
 
@@ -1421,29 +1503,29 @@ Digunakan untuk melihat aktivitas login, logout, kegagalan autentikasi, dan peru
 
 ## 19. Notification API
 
-Base path: "/notifications"
+Base path: `"/notifications"`
 
-19.1 Get My Notifications
+### 19.1 Get My Notifications
 
-GET "/notifications/my"
+`GET "/notifications/my"`
 
-19.2 Mark Notification as Read
+### 19.2 Mark Notification as Read
 
-PATCH "/notifications/:id/read"
+`PATCH "/notifications/:id/read"`
 
-19.3 Mark All as Read
+### 19.3 Mark All as Read
 
-PATCH "/notifications/read-all"
+`PATCH "/notifications/read-all"`
 
-19.4 Create Notification
+### 19.4 Create Notification
 
-POST "/notifications"
+`POST "/notifications"`
 
 Permission:
 
 notification.create
 
-19.5 Manage Notification Templates
+### 19.5 Manage Notification Templates
 
 | Method | Endpoint | Fungsi |
 | --- | --- | --- |
@@ -1456,32 +1538,35 @@ DELETE| "/notification-templates/:id"| Menonaktifkan template
 
 ## 20. System Settings API
 
-Base path: "/system-settings"
+Base path: `"/system-settings"`
 
-20.1 Get Settings
+### 20.1 Get Settings
 
-GET "/system-settings"
+`GET "/system-settings"`
 
 Permission:
 
 system.settings.view
 
-20.2 Update Setting
+### 20.2 Update Setting
 
-PATCH "/system-settings/:key"
+`PATCH "/system-settings/:key"`
 
 Request:
 
+```json
 {
   "value": "Asia/Jakarta"
 }
+```
 
-20.3 Get System Health
+### 20.3 Get System Health
 
-GET "/system/health"
+`GET "/system/health"`
 
 Response:
 
+```json
 {
   "success": true,
   "data": {
@@ -1491,6 +1576,7 @@ Response:
     "timestamp": "2026-11-05T00:00:00.000Z"
   }
 }
+```
 
 Endpoint health detail sebaiknya dibatasi untuk administrator dan monitoring internal.
 
@@ -1502,21 +1588,23 @@ Selain REST API, MAS menggunakan Socket.IO untuk memperbarui dashboard secara re
 
 Namespace:
 
-/
+`/`
 
-21.1 Authentication
+### 21.1 Authentication
 
 Client mengirim JWT ketika melakukan koneksi:
 
+```javascript
 const socket = io(API_URL, {
   auth: {
     token: accessToken
   }
 });
+```
 
 Server harus memvalidasi token, status akun, permission, dan scope sebelum mengizinkan subscription.
 
-21.2 Event dari Server
+### 21.2 Event dari Server
 
 | Event | Keterangan |
 | --- | --- |
@@ -1533,8 +1621,9 @@ Server harus memvalidasi token, status akun, permission, dan scope sebelum mengi
 | `security:incident-updated` | Insiden keamanan diperbarui |
 | `notification:new` | Notifikasi baru |
 
-21.3 Contoh Payload
+### 21.3 Contoh Payload
 
+```json
 {
   "eventId": "event-uuid",
   "profileType": "MILITARY",
@@ -1546,6 +1635,7 @@ Server harus memvalidasi token, status akun, permission, dan scope sebelum mengi
   },
   "recordedAt": "2026-11-05T00:15:32.000Z"
 }
+```
 
 Client hanya boleh menerima event yang sesuai dengan organizational scope dan permission-nya.
 
@@ -1571,9 +1661,11 @@ Aturan:
 
 Untuk attendance scan, gunakan database transaction dan partial unique index:
 
+```sql
 CREATE UNIQUE INDEX uq_attendance_one_open_session
 ON attendance_sessions (user_id)
 WHERE status = 'OPEN';
+```
 
 ---
 
@@ -1581,15 +1673,17 @@ WHERE status = 'OPEN';
 
 Setiap transaksi EXIT dan RETURN wajib menjalankan validasi lokasi.
 
-23.1 Required Data
+### 23.1 Required Data
 
+```json
 {
   "latitude": -7.4240000,
   "longitude": 109.2300000,
   "accuracy": 8
 }
+```
 
-23.2 Validation
+### 23.2 Validation
 
 - Latitude berada pada rentang -90 sampai 90.
 - Longitude berada pada rentang -180 sampai 180.
@@ -1599,21 +1693,23 @@ Setiap transaksi EXIT dan RETURN wajib menjalankan validasi lokasi.
 - GPS harus berada dalam radius checkpoint.
 - Accuracy harus memenuhi konfigurasi checkpoint.
 
-23.3 Distance Calculation
+### 23.3 Distance Calculation
 
 Backend menggunakan Haversine untuk menghitung jarak:
 
+```text
 distance = haversine(
   userLatitude,
   userLongitude,
   checkpointLatitude,
   checkpointLongitude
 )
+```
 
 Validasi:
 
-distance <= checkpoint.radiusMeter
-accuracy <= checkpoint.accuracyLimitMeter
+`distance <= checkpoint.radiusMeter`
+`accuracy <= checkpoint.accuracyLimitMeter`
 
 Jangan mempercayai hasil jarak dari frontend. Perhitungan dilakukan ulang di backend.
 
@@ -1623,6 +1719,7 @@ Jangan mempercayai hasil jarak dari frontend. Perhitungan dilakukan ulang di bac
 
 Backend menentukan event berdasarkan sesi OPEN pengguna.
 
+```text
 IF no OPEN session:
     CREATE EXIT event
     CREATE OPEN session
@@ -1632,6 +1729,7 @@ ELSE IF OPEN session exists:
     CREATE RETURN event
     UPDATE session to CLOSED
     presenceStatus = INSIDE
+```
 
 OVERDUE bukan status sesi tersendiri. OVERDUE merupakan status kehadiran turunan berdasarkan deadline kebijakan.
 
@@ -1701,6 +1799,7 @@ Implementasi API wajib menerapkan:
 
 Struktur implementasi API yang direkomendasikan:
 
+```text
 apps/api/src/
 ├── modules/
 │   ├── auth/
@@ -1738,6 +1837,7 @@ apps/api/src/
 │   ├── prisma/
 │   └── migrations/
 └── main.ts
+```
 
 ---
 

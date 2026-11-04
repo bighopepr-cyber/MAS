@@ -528,7 +528,7 @@ erDiagram
 
 ### 3.1 Identity & Access Management
 
-3.1.1 users
+#### 3.1.1 users
 
 Tabel utama seluruh akun autentikasi.
 
@@ -554,7 +554,7 @@ Aturan:
 - pin_hash tidak boleh menyimpan PIN asli.
 - Penghapusan akun menggunakan soft delete atau penonaktifan sesuai kebijakan.
 
-3.1.2 user_sessions
+#### 3.1.2 user_sessions
 
 Menyimpan refresh session pengguna.
 
@@ -572,7 +572,7 @@ created_at| TIMESTAMPTZ| NOT NULL
 
 Refresh token harus disimpan dalam bentuk hash.
 
-3.1.3 user_devices
+#### 3.1.3 user_devices
 
 Menyimpan perangkat yang digunakan user.
 
@@ -590,7 +590,7 @@ created_at| TIMESTAMPTZ| NOT NULL
 
 Device fingerprint merupakan indikator identifikasi perangkat dan tidak dianggap sebagai bukti identitas yang tidak dapat dipalsukan.
 
-3.1.4 roles
+#### 3.1.4 roles
 
 Menyimpan seluruh role sistem dan custom role.
 
@@ -612,7 +612,7 @@ Role bawaan:
 
 Role lain dibuat oleh SUPER_ADMIN.
 
-3.1.5 permissions
+#### 3.1.5 permissions
 
 Menyimpan permission granular.
 
@@ -654,7 +654,7 @@ Contoh permission yang konsisten dengan kontrak API:
 - report.export
 - system.settings.view
 
-3.1.6 user_roles
+#### 3.1.6 user_roles
 
 Tabel penghubung N:M antara user dan role.
 
@@ -665,7 +665,7 @@ Constraint:
 - FK role_id → roles.id.
 - FK assigned_by → users.id.
 
-3.1.7 role_permissions
+#### 3.1.7 role_permissions
 
 Tabel penghubung N:M antara role dan permission.
 
@@ -675,7 +675,7 @@ Constraint:
 - FK role_id → roles.id.
 - FK permission_id → permissions.id.
 
-3.1.8 user_permissions
+#### 3.1.8 user_permissions
 
 Permission langsung yang diberikan kepada user.
 
@@ -686,7 +686,7 @@ Kolom effect:
 
 Jika direct permission digunakan, evaluator authorization harus mempunyai aturan prioritas yang konsisten. DENY harus mengalahkan ALLOW untuk permission dan konteks yang sama.
 
-3.1.9 role_scopes
+#### 3.1.9 role_scopes
 
 Membatasi role berdasarkan organisasi.
 
@@ -701,9 +701,9 @@ Untuk implementasi, scope dapat menggunakan organization_id sebagai referensi ke
 
 ---
 
-3.2 Personnel Management
+### 3.2 Personnel Management
 
-3.2.1 military_personnel
+#### 3.2.1 military_personnel
 
 | Kolom | Tipe | Constraint |
 | --- | --- | --- |
@@ -720,7 +720,7 @@ updated_at| TIMESTAMPTZ| NOT NULL
 
 Satu profil Prajurit terhubung ke satu akun user.
 
-3.2.2 personnel_histories
+#### 3.2.2 personnel_histories
 
 Menyimpan histori perubahan data personel.
 
@@ -730,9 +730,9 @@ Histori tidak menggantikan data personel terkini.
 
 ---
 
-3.3 Persit Management
+### 3.3 Persit Management
 
-3.3.1 persit_members
+#### 3.3.1 persit_members
 
 | Kolom | Tipe | Constraint |
 | --- | --- | --- |
@@ -747,11 +747,11 @@ updated_at| TIMESTAMPTZ| NOT NULL
 
 Satu profil Persit terhubung ke satu akun user.
 
-3.3.2 persit_membership_histories
+#### 3.3.2 persit_membership_histories
 
 Mencatat perubahan status keanggotaan dan perubahan data Persit.
 
-3.3.3 family_relationships
+#### 3.3.3 family_relationships
 
 Menghubungkan Prajurit dan Persit.
 
@@ -774,9 +774,9 @@ Hubungan keluarga tidak digunakan sebagai relasi kepemilikan sesi absensi.
 
 ---
 
-3.4 Organization Management
+### 3.4 Organization Management
 
-3.4.1 organizations
+#### 3.4.1 organizations
 
 Menyimpan struktur organisasi secara hierarkis.
 
@@ -793,15 +793,15 @@ updated_at| TIMESTAMPTZ| NOT NULL
 
 parent_id dapat bernilai NULL untuk organisasi tingkat teratas.
 
-3.4.2 units
+#### 3.4.2 units
 
 Menyimpan unit di bawah organisasi.
 
-3.4.3 barracks
+#### 3.4.3 barracks
 
 Menyimpan data asrama atau lokasi penempatan.
 
-3.4.4 organization_assignments
+#### 3.4.4 organization_assignments
 
 Menyimpan penempatan user ke organisasi.
 
@@ -816,9 +816,9 @@ Aturan:
 
 ---
 
-3.5 QR & Checkpoint Management
+### 3.5 QR & Checkpoint Management
 
-3.5.1 checkpoints
+#### 3.5.1 checkpoints
 
 | Kolom | Tipe | Constraint |
 | --- | --- | --- |
@@ -835,7 +835,7 @@ status| VARCHAR(30)| NOT NULL
 created_at| TIMESTAMPTZ| NOT NULL
 updated_at| TIMESTAMPTZ| NOT NULL
 
-3.5.2 checkpoint_qrs
+#### 3.5.2 checkpoint_qrs
 
 | Kolom | Tipe | Constraint |
 | --- | --- | --- |
@@ -854,9 +854,9 @@ Koordinat dan radius tidak disimpan dalam QR.
 
 ---
 
-3.6 Attendance Management
+### 3.6 Attendance Management
 
-3.6.1 attendance_policies
+#### 3.6.1 attendance_policies
 
 Menyimpan kebijakan batas waktu absensi.
 
@@ -876,7 +876,7 @@ updated_at| TIMESTAMPTZ| NOT NULL
 
 Policy harus mempunyai aturan prioritas yang jelas jika beberapa policy berlaku pada satu user.
 
-3.6.2 attendance_sessions
+#### 3.6.2 attendance_sessions
 
 | Kolom | Tipe | Constraint |
 | --- | --- | --- |
@@ -904,7 +904,7 @@ Aturan:
 - Tidak terdapat FK exit_event_id atau return_event_id pada session.
 - Relasi event menggunakan session_id.
 
-3.6.3 attendance_events
+#### 3.6.3 attendance_events
 
 | Kolom | Tipe | Constraint |
 | --- | --- | --- |
@@ -940,7 +940,7 @@ validation_status:
 
 Hanya transaksi yang berhasil dan memenuhi aturan bisnis yang boleh menghasilkan Attendance Event operasional. Permintaan yang ditolak dapat dicatat pada security_events atau log permintaan terpisah tanpa dianggap sebagai absensi berhasil.
 
-3.6.4 attendance_corrections
+#### 3.6.4 attendance_corrections
 
 Menyimpan pengajuan koreksi event.
 
@@ -953,7 +953,7 @@ Status:
 - REJECTED.
 - CANCELLED.
 
-3.6.5 attendance_event_reviews
+#### 3.6.5 attendance_event_reviews
 
 Mencatat pemeriksaan terhadap event.
 
@@ -961,9 +961,9 @@ Tabel ini digunakan untuk review operasional dan pemeriksaan yang tidak selalu m
 
 ---
 
-3.7 Security & Audit
+### 3.7 Security & Audit
 
-3.7.1 security_events
+#### 3.7.1 security_events
 
 Menyimpan indikator keamanan, seperti:
 
@@ -975,37 +975,37 @@ Menyimpan indikator keamanan, seperti:
 - TOKEN_ABUSE.
 - PRIVILEGE_ANOMALY.
 
-3.7.2 security_incidents
+#### 3.7.2 security_incidents
 
 Menyimpan kasus keamanan yang memerlukan tindak lanjut.
 
-3.7.3 security_incident_actions
+#### 3.7.3 security_incident_actions
 
 Menyimpan histori tindakan penanganan insiden.
 
-3.7.4 audit_logs
+#### 3.7.4 audit_logs
 
 Menyimpan histori perubahan data dan aktivitas administratif.
 
 before_data dan after_data menggunakan JSONB.
 
-3.7.5 access_audit_logs
+#### 3.7.5 access_audit_logs
 
 Menyimpan histori keputusan akses, termasuk akses yang ditolak.
 
 ---
 
-3.8 Notification & System Settings
+### 3.8 Notification & System Settings
 
-3.8.1 notification_templates
+#### 3.8.1 notification_templates
 
 Menyimpan template notifikasi.
 
-3.8.2 notifications
+#### 3.8.2 notifications
 
 Menyimpan notifikasi untuk masing-masing user.
 
-3.8.3 system_settings
+#### 3.8.3 system_settings
 
 Menyimpan konfigurasi sistem yang dapat diubah oleh pengguna dengan permission khusus.
 
@@ -1015,7 +1015,7 @@ Nilai konfigurasi disimpan dalam JSONB dan wajib divalidasi berdasarkan schema k
 
 ## 4. Database Relationship Details
 
-4.1 Identity Relationship
+### 4.1 Identity Relationship
 
 | Parent | Child | Relationship |
 | --- | --- | --- |
@@ -1029,7 +1029,7 @@ users| user_permissions| 1:N
 permissions| user_permissions| 1:N
 roles| role_scopes| 1:N
 
-4.2 Personnel Relationship
+### 4.2 Personnel Relationship
 
 | Parent | Child | Relationship |
 | --- | --- | --- |
@@ -1040,7 +1040,7 @@ persit_members| persit_membership_histories| 1:N
 military_personnel| family_relationships| 1:N
 persit_members| family_relationships| 1:N
 
-4.3 Organization Relationship
+### 4.3 Organization Relationship
 
 | Parent | Child | Relationship |
 | --- | --- | --- |
@@ -1053,7 +1053,7 @@ organizations| organization_assignments| 1:N
 units| organization_assignments| 1:N
 barracks| organization_assignments| 1:N
 
-4.4 Attendance Relationship
+### 4.4 Attendance Relationship
 
 | Parent | Child | Relationship |
 | --- | --- | --- |
@@ -1066,7 +1066,7 @@ attendance_policies| attendance_sessions| 1:N
 attendance_events| attendance_corrections| 1:N
 attendance_events| attendance_event_reviews| 1:N
 
-4.5 QR Relationship
+### 4.5 QR Relationship
 
 | Parent | Child | Relationship |
 | --- | --- | --- |
@@ -1077,176 +1077,217 @@ Riwayat QR tetap disimpan. Hanya satu QR yang boleh ACTIVE untuk satu checkpoint
 
 ---
 
-5. ENUM & DOMAIN VALUES
+## 5. ENUM & DOMAIN VALUES
 
 Implementasi enum berikut wajib konsisten antara database, Prisma, backend DTO, dan frontend types.
 
-5.1 AccountType
+### 5.1 AccountType
 
-SYSTEM
-MILITARY
-PERSIT
+- SYSTEM
+- MILITARY
+- PERSIT
 
-5.2 ProfileType
+### 5.2 ProfileType
 
-MILITARY
-PERSIT
+- MILITARY
+- PERSIT
 
-5.3 AttendanceEventType
+### 5.3 AttendanceEventType
 
-EXIT
-RETURN
+- EXIT
+- RETURN
 
-5.4 AttendanceSessionStatus
+### 5.4 AttendanceSessionStatus
 
-OPEN
-CLOSED
+- OPEN
+- CLOSED
 
-5.5 PresenceStatus
+### 5.5 PresenceStatus
 
-INSIDE
-OUTSIDE
-OVERDUE
+- INSIDE
+- OUTSIDE
+- OVERDUE
 
 PresenceStatus merupakan hasil perhitungan sistem, bukan kolom yang wajib disimpan dalam attendance_sessions.
 
-5.6 CheckpointStatus
+### 5.6 CheckpointStatus
 
-ACTIVE
-INACTIVE
+- ACTIVE
+- INACTIVE
 
-5.7 QRStatus
+### 5.7 QRStatus
 
-ACTIVE
-REVOKED
+- ACTIVE
+- REVOKED
 
-5.8 ValidationStatus
+### 5.8 ValidationStatus
 
-PENDING
-VALID
-REJECTED
-REVIEW_REQUIRED
+- PENDING
+- VALID
+- REJECTED
+- REVIEW_REQUIRED
 
-5.9 CorrectionStatus
+### 5.9 CorrectionStatus
 
-PENDING
-APPROVED
-REJECTED
-CANCELLED
+- PENDING
+- APPROVED
+- REJECTED
+- CANCELLED
 
-5.10 SecuritySeverity
+### 5.10 SecuritySeverity
 
-LOW
-MEDIUM
-HIGH
-CRITICAL
+- LOW
+- MEDIUM
+- HIGH
+- CRITICAL
 
-5.11 SecurityIncidentStatus
+### 5.11 SecurityIncidentStatus
 
-OPEN
-INVESTIGATING
-RESOLVED
-CLOSED
+- OPEN
+- INVESTIGATING
+- RESOLVED
+- CLOSED
 
-5.12 UserPermissionEffect
+### 5.12 UserPermissionEffect
 
-ALLOW
-DENY
+- ALLOW
+- DENY
 
 ---
 
-6. DATABASE CONSTRAINTS
+## 6. DATABASE CONSTRAINTS
 
-6.1 Unique Constraints
+### 6.1 Unique Constraints
 
 Wajib dibuat:
 
+```sql
 ALTER TABLE users
 ADD CONSTRAINT uq_users_username UNIQUE (username);
+```
 
+```sql
 ALTER TABLE military_personnel
 ADD CONSTRAINT uq_military_nrp UNIQUE (nrp);
+```
 
+```sql
 ALTER TABLE military_personnel
 ADD CONSTRAINT uq_military_user UNIQUE (user_id);
+```
 
+```sql
 ALTER TABLE persit_members
 ADD CONSTRAINT uq_persit_user UNIQUE (user_id);
+```
 
+```sql
 ALTER TABLE persit_members
 ADD CONSTRAINT uq_persit_member_number UNIQUE (member_number);
+```
 
+```sql
 ALTER TABLE roles
 ADD CONSTRAINT uq_roles_code UNIQUE (code);
+```
 
+```sql
 ALTER TABLE permissions
 ADD CONSTRAINT uq_permissions_code UNIQUE (code);
+```
 
+```sql
 ALTER TABLE family_relationships
 ADD CONSTRAINT uq_family_relationship
 UNIQUE (military_id, persit_id);
+```
 
+```sql
 ALTER TABLE attendance_events
 ADD CONSTRAINT uq_attendance_idempotency
 UNIQUE (idempotency_key);
+```
 
 Jika constraint unique telah didefinisikan melalui Prisma migration, SQL tersebut tidak boleh dijalankan kembali sebagai constraint duplikat.
 
-6.2 One Active QR Per Checkpoint
+### 6.2 One Active QR Per Checkpoint
 
+```sql
 CREATE UNIQUE INDEX uq_checkpoint_active_qr
 ON checkpoint_qrs (checkpoint_id)
 WHERE status = 'ACTIVE';
+```
 
-6.3 One Open Session Per User
+### 6.3 One Open Session Per User
 
+```sql
 CREATE UNIQUE INDEX uq_attendance_one_open_session
 ON attendance_sessions (user_id)
 WHERE status = 'OPEN';
+```
 
-6.4 Geographic Constraints
+### 6.4 Geographic Constraints
 
+```sql
 ALTER TABLE checkpoints
 ADD CONSTRAINT chk_checkpoint_latitude
 CHECK (latitude BETWEEN -90 AND 90);
+```
 
+```sql
 ALTER TABLE checkpoints
 ADD CONSTRAINT chk_checkpoint_longitude
 CHECK (longitude BETWEEN -180 AND 180);
+```
 
+```sql
 ALTER TABLE checkpoints
 ADD CONSTRAINT chk_checkpoint_radius
 CHECK (radius_meter > 0);
+```
 
+```sql
 ALTER TABLE checkpoints
 ADD CONSTRAINT chk_checkpoint_accuracy
 CHECK (accuracy_limit_meter > 0);
+```
 
+```sql
 ALTER TABLE attendance_events
 ADD CONSTRAINT chk_event_latitude
 CHECK (latitude BETWEEN -90 AND 90);
+```
 
+```sql
 ALTER TABLE attendance_events
 ADD CONSTRAINT chk_event_longitude
 CHECK (longitude BETWEEN -180 AND 180);
+```
 
+```sql
 ALTER TABLE attendance_events
 ADD CONSTRAINT chk_event_accuracy
 CHECK (accuracy >= 0);
+```
 
+```sql
 ALTER TABLE attendance_events
 ADD CONSTRAINT chk_event_distance
 CHECK (distance_meter IS NULL OR distance_meter >= 0);
+```
 
-6.5 Session Constraints
+### 6.5 Session Constraints
 
+```sql
 ALTER TABLE attendance_sessions
 ADD CONSTRAINT chk_session_time
 CHECK (
     return_at IS NULL
     OR return_at > exit_at
 );
+```
 
+```sql
 ALTER TABLE attendance_sessions
 ADD CONSTRAINT chk_session_status
 CHECK (
@@ -1254,22 +1295,29 @@ CHECK (
     OR
     (status = 'CLOSED' AND return_at IS NOT NULL)
 );
+```
 
-6.6 Event Constraints
+### 6.6 Event Constraints
 
+```sql
 ALTER TABLE attendance_events
 ADD CONSTRAINT chk_attendance_event_type
 CHECK (event_type IN ('EXIT', 'RETURN'));
+```
 
 Satu sesi hanya mempunyai satu EXIT dan satu RETURN:
 
+```sql
 CREATE UNIQUE INDEX uq_attendance_session_exit
 ON attendance_events (session_id)
 WHERE event_type = 'EXIT';
+```
 
+```sql
 CREATE UNIQUE INDEX uq_attendance_session_return
 ON attendance_events (session_id)
 WHERE event_type = 'RETURN';
+```
 
 Konsistensi antara event, session, user, dan profile_type wajib divalidasi dalam transaksi backend. Apabila diperlukan, enforcement tambahan dapat menggunakan trigger database atau mekanisme constraint khusus.
 
@@ -1277,7 +1325,7 @@ Konsistensi antara event, session, user, dan profile_type wajib divalidasi dalam
 
 ## 7. Data Integrity Rules
 
-7.1 User Profile Integrity
+### 7.1 User Profile Integrity
 
 Aturan:
 
@@ -1290,7 +1338,7 @@ Aturan:
 
 Validasi account_type dan keberadaan profil harus dilakukan melalui transaction service dan, jika diperlukan, deferred constraint trigger PostgreSQL.
 
-7.2 Attendance Integrity
+### 7.2 Attendance Integrity
 
 Aturan:
 
@@ -1309,7 +1357,7 @@ Pembuatan EXIT harus membuat session dan event EXIT dalam satu database transact
 
 Pembuatan RETURN harus membuat event RETURN dan menutup session dalam satu database transaction.
 
-7.3 QR Integrity
+### 7.3 QR Integrity
 
 Aturan:
 
@@ -1320,7 +1368,7 @@ Aturan:
 - Token mentah tidak disimpan di database.
 - Pergantian koordinat checkpoint tidak mengubah token QR.
 
-7.4 Family Relationship Integrity
+### 7.4 Family Relationship Integrity
 
 Aturan:
 
@@ -1330,7 +1378,7 @@ Aturan:
 - Relasi keluarga tidak memengaruhi attendance session.
 - Satu Prajurit dapat memiliki lebih dari satu relasi Persit sesuai kebijakan keanggotaan yang berlaku.
 
-7.5 RBAC Integrity
+### 7.5 RBAC Integrity
 
 Aturan:
 
@@ -1349,59 +1397,95 @@ Aturan:
 
 Index wajib untuk mendukung query operasional.
 
+```sql
 CREATE INDEX idx_users_active
 ON users (is_active);
+```
 
+```sql
 CREATE INDEX idx_user_roles_user
 ON user_roles (user_id, is_active);
+```
 
+```sql
 CREATE INDEX idx_user_roles_role
 ON user_roles (role_id);
+```
 
+```sql
 CREATE INDEX idx_organization_parent
 ON organizations (parent_id);
+```
 
+```sql
 CREATE INDEX idx_organization_assignments_user
 ON organization_assignments (user_id, start_date, end_date);
+```
 
+```sql
 CREATE INDEX idx_checkpoints_organization
 ON checkpoints (organization_id, status);
+```
 
+```sql
 CREATE INDEX idx_checkpoint_qrs_checkpoint
 ON checkpoint_qrs (checkpoint_id, status);
+```
 
+```sql
 CREATE INDEX idx_attendance_sessions_user
 ON attendance_sessions (user_id, exit_at DESC);
+```
 
+```sql
 CREATE INDEX idx_attendance_events_user_time
 ON attendance_events (user_id, recorded_at DESC);
+```
 
+```sql
 CREATE INDEX idx_attendance_events_checkpoint_time
 ON attendance_events (checkpoint_id, recorded_at DESC);
+```
 
+```sql
 CREATE INDEX idx_attendance_events_session
 ON attendance_events (session_id, event_type);
+```
 
+```sql
 CREATE INDEX idx_attendance_events_profile_time
 ON attendance_events (profile_type, recorded_at DESC);
+```
 
+```sql
 CREATE INDEX idx_attendance_corrections_status
 ON attendance_corrections (correction_status, requested_at DESC);
+```
 
+```sql
 CREATE INDEX idx_security_events_severity
 ON security_events (severity, created_at DESC);
+```
 
+```sql
 CREATE INDEX idx_audit_logs_actor_time
 ON audit_logs (actor_user_id, created_at DESC);
+```
 
+```sql
 CREATE INDEX idx_audit_logs_entity
 ON audit_logs (entity_type, entity_id);
+```
 
+```sql
 CREATE INDEX idx_access_audit_user_time
 ON access_audit_logs (user_id, created_at DESC);
+```
 
+```sql
 CREATE INDEX idx_notifications_user
 ON notifications (user_id, read_at, created_at DESC);
+```
 
 Index tambahan dapat ditentukan berdasarkan hasil EXPLAIN ANALYZE dan pola query produksi.
 
@@ -1409,7 +1493,7 @@ Index yang sudah tercakup oleh unique constraint atau unique index tidak perlu d
 
 ---
 
-9. DELETE & UPDATE POLICY
+## 9. DELETE & UPDATE POLICY
 
 | Tabel | Kebijakan penghapusan | Kebijakan perubahan |
 | --- | --- | --- |
@@ -1437,9 +1521,9 @@ Foreign key pada data historis sebaiknya menggunakan RESTRICT atau NO ACTION, bu
 
 ---
 
-10. ATTENDANCE TRANSACTION DATA FLOW
+## 10. ATTENDANCE TRANSACTION DATA FLOW
 
-10.1 EXIT Transaction
+### 10.1 EXIT Transaction
 
 flowchart TD
     A[Authenticated User] --> B[Scan Static QR]
@@ -1458,7 +1542,7 @@ flowchart TD
     N --> O[Return EXIT Confirmation]
     I -->|Yes| P[Resolve as RETURN]
 
-10.2 RETURN Transaction
+### 10.2 RETURN Transaction
 
 flowchart TD
     A[Authenticated User] --> B[Scan Static QR]
@@ -1474,7 +1558,7 @@ flowchart TD
     K --> L[Publish Realtime Event]
     L --> M[Return RETURN Confirmation]
 
-10.3 Session Status Resolution
+### 10.3 Session Status Resolution
 
 flowchart TD
     A[Evaluate User Presence] --> B{Has OPEN Session?}
@@ -1487,7 +1571,7 @@ flowchart TD
 
 ## 11. Database Security
 
-11.1 Database Access
+### 11.1 Database Access
 
 Database hanya dapat diakses melalui backend service atau koneksi administrasi yang diotorisasi.
 
@@ -1501,7 +1585,7 @@ Ketentuan:
 - Database credential dikelola melalui secret management.
 - Koneksi database menggunakan TLS jika melewati jaringan yang tidak sepenuhnya dipercaya.
 
-11.2 Immutable Attendance Event
+### 11.2 Immutable Attendance Event
 
 Attendance Event harus dilindungi dari perubahan tidak sah.
 
@@ -1513,7 +1597,7 @@ Implementasi minimum:
 4. Audit log mencatat seluruh koreksi.
 5. Backup dan retensi mengikuti kebijakan organisasi.
 
-11.3 Audit Log
+### 11.3 Audit Log
 
 Audit log tidak boleh diubah oleh akun operasional biasa.
 
@@ -1565,6 +1649,7 @@ Setiap migration wajib:
 
 Contoh struktur:
 
+```text
 packages/database/prisma/
 ├── schema.prisma
 ├── migrations/
@@ -1577,6 +1662,7 @@ packages/database/prisma/
 │   ├── 202611050007_init_security_audit/
 │   └── 202611050008_init_supporting/
 └── seed.ts
+```
 
 Nama migration merupakan contoh pengelompokan; urutan sebenarnya harus mengikuti dependency foreign key.
 

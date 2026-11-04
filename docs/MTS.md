@@ -21,9 +21,9 @@
 
 ---
 
-1. PENDAHULUAN
+## 1. PENDAHULUAN
 
-1.1 Deskripsi Sistem
+### 1.1 Deskripsi Sistem
 
 Military Attendance System (MAS) adalah sistem informasi terintegrasi untuk mengelola identitas pengguna, data personel militer, data anggota Persit, aktivitas keluar-masuk, checkpoint, validasi lokasi, monitoring kehadiran, keamanan, audit aktivitas, serta pelaporan dalam lingkungan organisasi militer.
 
@@ -38,7 +38,7 @@ Setiap pengguna memiliki akun autentikasi dan riwayat kehadiran independen. Praj
 
 Sistem menyediakan Dynamic Role-Based Access Control (Dynamic RBAC) sehingga administrator utama dapat menentukan role, permission, dan organizational scope sesuai kebutuhan organisasi tanpa memerlukan perubahan kode program.
 
-1.2 Tujuan Sistem
+### 1.2 Tujuan Sistem
 
 MAS wajib memenuhi tujuan berikut:
 
@@ -53,7 +53,7 @@ MAS wajib memenuhi tujuan berikut:
 9. Menyediakan monitoring dan pelaporan operasional.
 10. Menjamin keamanan, konsistensi, dan integritas data.
 
-1.3 Ruang Lingkup
+### 1.3 Ruang Lingkup
 
 Sistem terdiri dari sepuluh domain utama:
 
@@ -68,7 +68,7 @@ Sistem terdiri dari sepuluh domain utama:
 9. Dashboard & Reporting.
 10. System & Organization Management.
 
-1.4 Prinsip Sistem
+### 1.4 Prinsip Sistem
 
 Seluruh implementasi wajib mengikuti prinsip:
 
@@ -86,11 +86,11 @@ Seluruh implementasi wajib mengikuti prinsip:
 
 ---
 
-2. KETENTUAN FUNGSIONAL UTAMA
+## 2. KETENTUAN FUNGSIONAL UTAMA
 
 Ketentuan berikut merupakan aturan bisnis wajib dan tidak boleh diubah oleh implementasi frontend.
 
-2.1 Identitas Pengguna
+### 2.1 Identitas Pengguna
 
 Terdapat dua jenis profil operasional:
 
@@ -112,7 +112,7 @@ Ketentuan:
 9. Akun administratif dapat menggunakan tipe akun SYSTEM tanpa profil personel.
 10. Validasi hubungan keluarga dilakukan berdasarkan data yang terverifikasi.
 
-2.2 QR Code
+### 2.2 QR Code
 
 Ketentuan QR:
 
@@ -131,7 +131,7 @@ Ketentuan QR:
 
 Perubahan koordinat atau radius checkpoint tidak mengharuskan QR dibuat ulang.
 
-2.3 Geofence
+### 2.3 Geofence
 
 Setiap checkpoint mempunyai:
 
@@ -148,11 +148,11 @@ Validasi dilakukan menggunakan jarak Haversine.
 
 Transaksi dinyatakan memenuhi geofence jika:
 
-Distance <= Checkpoint Radius
+`Distance <= Checkpoint Radius`
 
 Dan:
 
-GPS Accuracy <= Configured Accuracy Limit
+`GPS Accuracy <= Configured Accuracy Limit`
 
 Jika GPS tidak tersedia, koordinat tidak valid, atau akurasi tidak memenuhi batas, transaksi tidak dapat dinyatakan berhasil.
 
@@ -160,7 +160,7 @@ Nilai radius dan batas akurasi ditentukan melalui konfigurasi checkpoint, bukan 
 
 GPS browser tidak dianggap sebagai bukti anti-spoofing mutlak. Sistem wajib menyimpan metadata validasi dan indikator risiko untuk mendukung pemeriksaan lanjutan.
 
-2.4 Attendance Resolver
+### 2.4 Attendance Resolver
 
 Backend menentukan jenis transaksi secara otomatis.
 
@@ -172,7 +172,7 @@ Aturan:
 
 Frontend tidak diperbolehkan menentukan event type sebagai sumber kebenaran.
 
-2.5 Status Kehadiran
+### 2.5 Status Kehadiran
 
 Status operasional merupakan hasil evaluasi sesi dan policy.
 
@@ -191,7 +191,7 @@ Status sesi disimpan terpisah:
 
 OVERDUE merupakan status turunan, bukan status transaksi atau status sesi.
 
-2.6 Independensi Prajurit dan Persit
+### 2.6 Independensi Prajurit dan Persit
 
 Setiap user mempunyai sesi absensi masing-masing.
 
@@ -205,9 +205,9 @@ Ketentuan:
 
 ---
 
-3. ARSITEKTUR TEKNOLOGI
+## 3. ARSITEKTUR TEKNOLOGI
 
-3.1 Technology Stack
+### 3.1 Technology Stack
 
 | Komponen | Teknologi |
 | --- | --- |
@@ -233,7 +233,7 @@ Ketentuan:
 
 Versi dependency harus dikunci menggunakan lockfile dan diuji kompatibilitasnya sebelum deployment. Versi framework yang digunakan wajib mendapatkan dukungan keamanan yang masih berlaku.
 
-3.2 Arsitektur Aplikasi
+### 3.2 Arsitektur Aplikasi
 
 MAS menggunakan Modular Monolith dengan satu backend NestJS dan domain terpisah.
 
@@ -249,8 +249,9 @@ Komponen utama:
 
 Setiap domain harus mempunyai tanggung jawab yang terdefinisi dan tidak boleh mengakses database domain lain melalui implementasi yang tersebar tanpa kontrak layanan yang jelas.
 
-3.3 Struktur Monorepo
+### 3.3 Struktur Monorepo
 
+```text
 mas/
 ├── apps/
 │   ├── web/
@@ -310,16 +311,17 @@ mas/
 ├── turbo.json
 ├── package.json
 └── README.md
+```
 
 ---
 
 ## 4. Modul 01 — Identity & Access Management
 
-4.1 Fungsi
+### 4.1 Fungsi
 
 Modul ini bertanggung jawab atas seluruh proses autentikasi, identitas akun, pengelolaan role, permission, sesi, dan batas kewenangan.
 
-4.2 Authentication
+### 4.2 Authentication
 
 Sistem menyediakan:
 
@@ -338,7 +340,7 @@ Autentikasi utama menggunakan username/NRP dan PIN sesuai tipe akun.
 
 PIN harus di-hash menggunakan Argon2id atau mekanisme password hashing yang aman. PIN tidak boleh disimpan sebagai plaintext atau dienkripsi menggunakan reversible encryption.
 
-4.3 Dynamic RBAC
+### 4.3 Dynamic RBAC
 
 Role bawaan hanya:
 
@@ -358,7 +360,7 @@ Contoh role custom:
 
 Nama tersebut bukan role sistem yang wajib tersedia sejak instalasi.
 
-4.4 Entitas RBAC
+### 4.4 Entitas RBAC
 
 - User.
 - Role.
@@ -375,7 +377,7 @@ Permission dapat diberikan melalui role dan, jika diaktifkan oleh kebijakan sist
 
 Efektif permission merupakan hasil gabungan role dan direct permission yang masih aktif, dikurangi pembatasan akses yang berlaku.
 
-4.5 Organizational Scope
+### 4.5 Organizational Scope
 
 Setiap role dapat dibatasi berdasarkan:
 
@@ -388,7 +390,7 @@ Setiap role dapat dibatasi berdasarkan:
 
 Backend wajib memvalidasi scope pada setiap permintaan yang mengakses data organisasi.
 
-4.6 Perlindungan SUPER_ADMIN
+### 4.6 Perlindungan SUPER_ADMIN
 
 SUPER_ADMIN:
 
@@ -470,7 +472,7 @@ Persit tidak otomatis mendapatkan permission hanya karena mempunyai profil Persi
 
 ## 7. Modul 04 — Attendance Management
 
-7.1 Fungsi
+### 7.1 Fungsi
 
 - EXIT.
 - RETURN.
@@ -483,7 +485,7 @@ Persit tidak otomatis mendapatkan permission hanya karena mempunyai profil Persi
 - Attendance Correction.
 - Attendance Monitoring.
 
-7.2 Workflow EXIT
+### 7.2 Workflow EXIT
 
 1. User melakukan autentikasi.
 2. User melakukan scan QR.
@@ -498,7 +500,7 @@ Persit tidak otomatis mendapatkan permission hanya karena mempunyai profil Persi
 11. Backend mengirim event realtime.
 12. Frontend menampilkan hasil transaksi.
 
-7.3 Workflow RETURN
+### 7.3 Workflow RETURN
 
 1. User melakukan autentikasi.
 2. User melakukan scan QR.
@@ -512,16 +514,18 @@ Persit tidak otomatis mendapatkan permission hanya karena mempunyai profil Persi
 10. Backend mengirim pembaruan realtime.
 11. Frontend menampilkan hasil transaksi.
 
-7.4 Attendance Resolver
+### 7.4 Attendance Resolver
 
+```text
 IF user has no OPEN session:
     EVENT = EXIT
 ELSE:
     EVENT = RETURN
+```
 
 Sesi yang telah melewati batas waktu tetap dapat ditutup melalui RETURN.
 
-7.5 Attendance Session
+### 7.5 Attendance Session
 
 Setiap sesi menyimpan:
 
@@ -540,7 +544,7 @@ Status sesi:
 
 Event EXIT dan RETURN direlasikan melalui session_id. Tidak diperlukan foreign key melingkar dari session ke event.
 
-7.6 Attendance Event
+### 7.6 Attendance Event
 
 Setiap event menyimpan:
 
@@ -562,7 +566,7 @@ Setiap event menyimpan:
 
 Event merupakan catatan historis yang tidak boleh diubah secara langsung setelah commit.
 
-7.7 Concurrency Control
+### 7.7 Concurrency Control
 
 Backend wajib menggunakan:
 
@@ -578,7 +582,7 @@ Satu user hanya boleh memiliki satu session OPEN.
 
 ## 8. Modul 05 — QR Code & Checkpoint Management
 
-8.1 Checkpoint
+### 8.1 Checkpoint
 
 Setiap checkpoint memiliki:
 
@@ -594,7 +598,7 @@ Setiap checkpoint memiliki:
 - Created At.
 - Updated At.
 
-8.2 QR Generation
+### 8.2 QR Generation
 
 Token QR harus:
 
@@ -608,7 +612,7 @@ Token QR harus:
 
 Token mentah hanya ditampilkan saat pembuatan atau proses pencetakan yang terotorisasi. Sistem tidak menyimpan token mentah dalam database atau log aplikasi.
 
-8.3 QR PDF
+### 8.3 QR PDF
 
 Fitur cetak harus menghasilkan:
 
@@ -626,7 +630,7 @@ PDF hanya boleh dihasilkan oleh pengguna dengan permission yang sesuai.
 
 ## 9. Modul 06 — Location & Presence Verification
 
-9.1 Geofence Engine
+### 9.1 Geofence Engine
 
 Backend menghitung jarak antara koordinat user dan koordinat checkpoint menggunakan Haversine.
 
@@ -641,7 +645,7 @@ Parameter:
 
 Validasi wajib dilakukan pada backend.
 
-9.2 Location Validation
+### 9.2 Location Validation
 
 Status validasi:
 
@@ -658,7 +662,7 @@ Longitude: -180 sampai 180.
 
 Accuracy tidak boleh bernilai negatif, NaN, atau tidak terhingga.
 
-9.3 Privacy
+### 9.3 Privacy
 
 Sistem hanya mengambil lokasi saat transaksi absensi.
 
@@ -737,7 +741,7 @@ Audit log penting harus dilindungi dari modifikasi dan penghapusan oleh akun ope
 
 ## 12. Modul 09 — Dashboard & Reporting
 
-12.1 Dashboard
+### 12.1 Dashboard
 
 Dashboard menampilkan:
 
@@ -754,7 +758,7 @@ Dashboard menampilkan:
 - Aktivitas terbaru.
 - Security alerts sesuai kewenangan.
 
-12.2 Reporting
+### 12.2 Reporting
 
 Laporan tersedia berdasarkan:
 
@@ -778,7 +782,7 @@ Format ekspor:
 
 Seluruh ekspor harus tunduk pada permission dan organization scope.
 
-12.3 Realtime
+### 12.3 Realtime
 
 Dashboard menggunakan Socket.IO.
 
@@ -809,7 +813,7 @@ Konfigurasi yang memengaruhi status OVERDUE harus mempunyai masa berlaku dan his
 
 ## 14. Database Specification
 
-14.1 Database Standards
+### 14.1 Database Standards
 
 | Parameter | Ketentuan |
 | --- | --- |
@@ -824,7 +828,7 @@ Relations| Foreign Key
 Migration| Version-controlled
 Integrity| Database constraints
 
-14.2 Core Tables
+### 14.2 Core Tables
 
 Identity
 
@@ -889,7 +893,7 @@ Supporting
 - notification_templates.
 - system_settings.
 
-14.3 Database Constraints
+### 14.3 Database Constraints
 
 Wajib tersedia:
 
@@ -909,7 +913,7 @@ Wajib tersedia:
 
 Partial unique indexes dibuat melalui SQL migration karena tidak semua constraint tersebut dapat dideklarasikan langsung melalui Prisma Schema.
 
-14.4 Attendance Integrity
+### 14.4 Attendance Integrity
 
 Sistem wajib menjamin:
 
@@ -926,7 +930,7 @@ Sistem wajib menjamin:
 
 ## 15. API Specification
 
-15.1 API Standard
+### 15.1 API Standard
 
 Base URL:
 
@@ -948,7 +952,7 @@ API wajib menerapkan:
 - Pagination.
 - Idempotency untuk transaksi absensi.
 
-15.2 Authentication API
+### 15.2 Authentication API
 
 | Method | Endpoint |
 | --- | --- |
@@ -962,7 +966,7 @@ GET| /users/:id
 PATCH| /users/:id
 POST| /users/:id/reset-pin
 
-15.3 RBAC API
+### 15.3 RBAC API
 
 | Method | Endpoint |
 | --- | --- |
@@ -979,7 +983,7 @@ Penghapusan role yang sedang digunakan harus diblokir atau melalui prosedur penc
 
 SUPER_ADMIN protected role tidak dapat dihapus melalui operasi biasa.
 
-15.4 Personnel API
+### 15.4 Personnel API
 
 | Method | Endpoint |
 | --- | --- |
@@ -994,7 +998,7 @@ GET| /persit/:id
 PATCH| /persit/:id
 GET| /persit/:id/history
 
-15.5 Checkpoint API
+### 15.5 Checkpoint API
 
 | Method | Endpoint |
 | --- | --- |
@@ -1006,7 +1010,7 @@ POST| /checkpoints/:id/qr
 POST| /checkpoints/:id/qr/revoke
 GET| /checkpoints/:id/qr/pdf
 
-15.6 Attendance API
+### 15.6 Attendance API
 
 | Method | Endpoint |
 | --- | --- |
@@ -1020,7 +1024,7 @@ GET| /attendance/corrections
 POST| /attendance/corrections/:id/approve
 POST| /attendance/corrections/:id/reject
 
-15.7 Reporting API
+### 15.7 Reporting API
 
 | Method | Endpoint |
 | --- | --- |
@@ -1030,8 +1034,9 @@ GET| /reports/personnel
 GET| /reports/checkpoints
 GET| /reports/export
 
-15.8 Attendance Request
+### 15.8 Attendance Request
 
+```json
 {
   "qrToken": "RANDOM_CHECKPOINT_TOKEN",
   "latitude": -7.4240000,
@@ -1040,13 +1045,15 @@ GET| /reports/export
   "deviceId": "DEVICE-UUID",
   "idempotencyKey": "UNIQUE-REQUEST-UUID"
 }
+```
 
 Backend menentukan EXIT atau RETURN.
 
 Timestamp resmi diambil dari server, bukan dari request client.
 
-15.9 Attendance Response
+### 15.9 Attendance Response
 
+```json
 {
   "success": true,
   "data": {
@@ -1066,16 +1073,17 @@ Timestamp resmi diambil dari server, bukan dari request client.
   },
   "requestId": "REQUEST-UUID"
 }
+```
 
 ---
 
 ## 16. Frontend Specification
 
-16.1 Framework
+### 16.1 Framework
 
 Frontend menggunakan Next.js 14 App Router dengan TypeScript.
 
-16.2 User Interface
+### 16.2 User Interface
 
 Halaman utama:
 
@@ -1100,7 +1108,7 @@ Navigasi ditampilkan berdasarkan permission pengguna.
 
 Namun, penyembunyian menu bukan pengganti authorization backend.
 
-16.3 Scanner
+### 16.3 Scanner
 
 Scanner wajib:
 
@@ -1114,7 +1122,7 @@ Scanner wajib:
 - Menampilkan hasil EXIT atau RETURN.
 - Menampilkan pesan kegagalan yang jelas.
 
-16.4 PWA
+### 16.4 PWA
 
 PWA menyediakan:
 
@@ -1133,7 +1141,7 @@ Transaksi tidak boleh dinyatakan berhasil hanya karena tersimpan secara lokal.
 
 ## 17. Security Specification
 
-17.1 Authentication Security
+### 17.1 Authentication Security
 
 - HTTPS wajib.
 - PIN menggunakan Argon2id.
@@ -1144,7 +1152,7 @@ Transaksi tidak boleh dinyatakan berhasil hanya karena tersimpan secara lokal.
 - Akun nonaktif ditolak.
 - Secret tidak boleh disimpan di repository.
 
-17.2 Authorization Security
+### 17.2 Authorization Security
 
 Setiap endpoint wajib memvalidasi:
 
@@ -1155,7 +1163,7 @@ Setiap endpoint wajib memvalidasi:
 5. Kepemilikan resource jika diperlukan.
 6. Profile type jika diperlukan.
 
-17.3 Application Security
+### 17.3 Application Security
 
 Sistem wajib menerapkan:
 
@@ -1171,7 +1179,7 @@ Sistem wajib menerapkan:
 - Secret management.
 - Dependency vulnerability scanning.
 
-17.4 QR Security
+### 17.4 QR Security
 
 - Token acak dengan entropi tinggi.
 - Hash token di database.
@@ -1180,7 +1188,7 @@ Sistem wajib menerapkan:
 - Validasi QR dilakukan di backend.
 - Satu QR aktif per checkpoint.
 
-17.5 Audit Security
+### 17.5 Audit Security
 
 Audit log untuk aktivitas penting harus terlindung dari perubahan tidak sah.
 
@@ -1236,7 +1244,7 @@ Target tersebut wajib dibuktikan melalui pengujian pada kapasitas dan lingkungan
 
 ## 20. Infrastructure & Deployment Specification
 
-20.1 Production Components
+### 20.1 Production Components
 
 - Ubuntu Server.
 - Docker Engine.
@@ -1251,7 +1259,7 @@ Target tersebut wajib dibuktikan melalui pengujian pada kapasitas dan lingkungan
 - Monitoring.
 - Centralized Logging.
 
-20.2 Environment
+### 20.2 Environment
 
 Konfigurasi production wajib terpisah dari development.
 
@@ -1271,7 +1279,7 @@ Environment minimum:
 
 Secret harus mempunyai kebijakan rotasi dan tidak boleh dikomit ke repository.
 
-20.3 Production Deployment Requirements
+### 20.3 Production Deployment Requirements
 
 Sebelum sistem dinyatakan siap produksi:
 
@@ -1291,7 +1299,7 @@ Sebelum sistem dinyatakan siap produksi:
 - Deployment rollback tersedia.
 - Recovery procedure terdokumentasi.
 
-20.4 Database Backup
+### 20.4 Database Backup
 
 Sistem wajib mendukung:
 
@@ -1304,13 +1312,13 @@ Sistem wajib mendukung:
 
 RPO dan RTO wajib ditentukan dalam dokumen operasional dan diuji.
 
-20.5 Health Checks
+### 20.5 Health Checks
 
 Endpoint operasional:
 
-GET /health
-GET /health/live
-GET /health/ready
+`GET /health`
+`GET /health/live`
+`GET /health/ready`
 
 Health readiness harus memeriksa dependency penting seperti database dan Redis sesuai kebutuhan layanan.
 
@@ -1345,10 +1353,11 @@ Ketentuan:
 
 ---
 
-22. ERROR HANDLING
+## 22. ERROR HANDLING
 
 Format error response:
 
+```json
 {
   "success": false,
   "error": {
@@ -1361,6 +1370,7 @@ Format error response:
   },
   "requestId": "REQUEST-UUID"
 }
+```
 
 Kode error standar mengikuti katalog pada dokumen API:
 
@@ -1410,7 +1420,7 @@ Koreksi tidak boleh menghapus jejak transaksi awal.
 
 Sebelum release produksi, seluruh persyaratan berikut harus lulus.
 
-24.1 Functional Testing
+### 24.1 Functional Testing
 
 - Login Prajurit.
 - Login Persit.
@@ -1430,7 +1440,7 @@ Sebelum release produksi, seluruh persyaratan berikut harus lulus.
 - Reporting.
 - Realtime dashboard.
 
-24.2 Data Integrity Testing
+### 24.2 Data Integrity Testing
 
 - Tidak ada dua session OPEN untuk satu user.
 - Tidak ada dua QR ACTIVE untuk satu checkpoint.
@@ -1441,7 +1451,7 @@ Sebelum release produksi, seluruh persyaratan berikut harus lulus.
 - Tidak ada event dengan koordinat tidak valid.
 - Tidak ada perubahan event asli melalui correction.
 
-24.3 Security Testing
+### 24.3 Security Testing
 
 - Authentication testing.
 - Authorization testing.
@@ -1457,7 +1467,7 @@ Sebelum release produksi, seluruh persyaratan berikut harus lulus.
 - Secret exposure testing.
 - Dependency vulnerability testing.
 
-24.4 Concurrency Testing
+### 24.4 Concurrency Testing
 
 Sistem wajib diuji dengan permintaan bersamaan untuk user yang sama.
 
@@ -1469,7 +1479,7 @@ Hasil yang diharapkan:
 - Duplicate request ditangani berdasarkan idempotency key.
 - Database tetap konsisten.
 
-24.5 Backup & Recovery Testing
+### 24.5 Backup & Recovery Testing
 
 - Backup berhasil.
 - Restore berhasil.
