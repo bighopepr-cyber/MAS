@@ -1,0 +1,25 @@
+{
+  "name": "mas",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "npm@11.19.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "db:generate": "npm run generate --workspace=@mas/database",
+    "db:migrate": "npm run migrate:dev --workspace=@mas/database",
+    "db:deploy": "npm run migrate:deploy --workspace=@mas/database",
+    "db:seed": "npm run seed --workspace=@mas/database"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0",
+    "typescript": "^5.6.3"
+  }
+}
