@@ -1,23 +1,23 @@
-ENTITY RELATIONSHIP DIAGRAM (ERD)
+# Entity Relationship Diagram (ERD)
 
-MILITARY ATTENDANCE SYSTEM (MAS)
+## Military Attendance System (MAS)
 
-Nama File: "ERD.md"
-Nama Sistem: Military Attendance System (MAS)
-Versi: 1.0.0
-Status: Final Database Design Baseline
-Database: PostgreSQL
-ORM: Prisma
-Primary Key: UUID
-Database Naming: snake_case
-Timezone: UTC
-Coordinate Precision: DECIMAL(10,7)
+| Metadata | Nilai |
+| --- | --- |
+| Versi | 1.0.0 |
+| Status | Baseline desain database |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Primary key | UUID |
+| Penamaan database | `snake_case` |
+| Zona waktu penyimpanan | UTC |
+| Presisi koordinat | `DECIMAL(10,7)` |
 
 ---
 
-1. DATABASE DESIGN OVERVIEW
+## 1. Database Design Overview
 
-1.1 Tujuan
+### 1.1 Tujuan
 
 Dokumen ini mendefinisikan struktur relasional database Military Attendance System (MAS), mencakup:
 
@@ -34,7 +34,7 @@ Dokumen ini mendefinisikan struktur relasional database Military Attendance Syst
 
 ERD ini menjadi acuan utama pembuatan PostgreSQL database, Prisma Schema, database migration, backend entity relationship, serta integrasi API.
 
-1.2 Database Design Principles
+### 1.2 Database Design Principles
 
 Seluruh tabel mengikuti ketentuan:
 
@@ -51,24 +51,26 @@ Seluruh tabel mengikuti ketentuan:
 - Data organisasi mendukung struktur hierarkis.
 - Setiap transaksi absensi harus mempunyai identitas user dan checkpoint yang valid.
 
-1.3 Relationship Convention
+### 1.3 Relationship Convention
 
-Simbol| Arti
-PK| Primary Key
-FK| Foreign Key
-UK| Unique Key
-1:1| One to One
-1:N| One to Many
-N:M| Many to Many
-Nullable| Relasi boleh kosong
-Required| Relasi wajib tersedia
+| Simbol | Arti |
+| --- | --- |
+| PK | Primary key |
+| FK | Foreign key |
+| UK | Unique key |
+| 1:1 | One to one |
+| 1:N | One to many |
+| N:M | Many to many |
+| Nullable | Relasi boleh kosong |
+| Required | Relasi wajib tersedia |
 
 ---
 
-2. COMPLETE ENTITY RELATIONSHIP DIAGRAM
+## 2. Complete Entity Relationship Diagram
 
-2.1 Full ERD
+### 2.1 Full ERD
 
+```mermaid
 erDiagram
 
     USERS {
@@ -518,18 +520,20 @@ erDiagram
     NOTIFICATION_TEMPLATES o|--o{ NOTIFICATIONS : uses
 
     USERS o|--o{ SYSTEM_SETTINGS : updates
+```
 
 ---
 
-3. ENTITY SPECIFICATION
+## 3. Entity Specification
 
-3.1 Identity & Access Management
+### 3.1 Identity & Access Management
 
 3.1.1 users
 
 Tabel utama seluruh akun autentikasi.
 
-Kolom| Tipe| Constraint| Keterangan
+| Kolom | Tipe | Constraint | Keterangan |
+| --- | --- | --- | --- |
 id| UUID| PK| Identitas akun
 username| VARCHAR(100)| UK, NOT NULL| Username atau NRP
 pin_hash| TEXT| NOT NULL| Hash PIN
@@ -554,7 +558,8 @@ Aturan:
 
 Menyimpan refresh session pengguna.
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 user_id| UUID| FK users.id
 refresh_token_hash| VARCHAR(255)| UK
@@ -571,7 +576,8 @@ Refresh token harus disimpan dalam bentuk hash.
 
 Menyimpan perangkat yang digunakan user.
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 user_id| UUID| FK users.id
 device_fingerprint| VARCHAR(255)| NOT NULL
@@ -588,7 +594,8 @@ Device fingerprint merupakan indikator identifikasi perangkat dan tidak dianggap
 
 Menyimpan seluruh role sistem dan custom role.
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 code| VARCHAR(100)| UK
 name| VARCHAR(150)| NOT NULL
@@ -609,7 +616,8 @@ Role lain dibuat oleh SUPER_ADMIN.
 
 Menyimpan permission granular.
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 code| VARCHAR(150)| UK
 module| VARCHAR(100)| NOT NULL
@@ -617,29 +625,34 @@ action| VARCHAR(100)| NOT NULL
 description| TEXT| NULL
 created_at| TIMESTAMPTZ| NOT NULL
 
-Contoh permission:
+Contoh permission yang konsisten dengan kontrak API:
 
-- attendance.read
-- attendance.exit
-- attendance.return
+- attendance.scan
+- attendance.view.own
+- attendance.view.all
 - attendance.monitor
-- attendance.correct
-- attendance.approve_correction
-- personnel.read
+- attendance.correction.create
+- attendance.correction.approve
+- personnel.view
 - personnel.create
 - personnel.update
-- persit.read
+- persit.view
 - persit.create
 - persit.update
+- checkpoint.view
 - checkpoint.create
 - checkpoint.update
 - checkpoint.qr.generate
 - checkpoint.qr.revoke
-- rbac.role.manage
-- rbac.permission.manage
-- audit.read
+- rbac.role.view
+- rbac.role.create
+- rbac.role.update
+- rbac.role.delete
+- rbac.permission.view
+- rbac.permission.assign
+- audit.view
 - report.export
-- system.settings.manage
+- system.settings.view
 
 3.1.6 user_roles
 
@@ -692,7 +705,8 @@ Untuk implementasi, scope dapat menggunakan organization_id sebagai referensi ke
 
 3.2.1 military_personnel
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 user_id| UUID| FK users.id, UK
 nrp| VARCHAR(50)| UK, NOT NULL
@@ -720,7 +734,8 @@ Histori tidak menggantikan data personel terkini.
 
 3.3.1 persit_members
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 user_id| UUID| FK users.id, UK
 member_number| VARCHAR(50)| UK
@@ -740,7 +755,8 @@ Mencatat perubahan status keanggotaan dan perubahan data Persit.
 
 Menghubungkan Prajurit dan Persit.
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 military_id| UUID| FK military_personnel.id
 persit_id| UUID| FK persit_members.id
@@ -764,7 +780,8 @@ Hubungan keluarga tidak digunakan sebagai relasi kepemilikan sesi absensi.
 
 Menyimpan struktur organisasi secara hierarkis.
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 parent_id| UUID| FK organizations.id, NULL
 code| VARCHAR(100)| UK
@@ -803,7 +820,8 @@ Aturan:
 
 3.5.1 checkpoints
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 organization_id| UUID| FK organizations.id
 code| VARCHAR(100)| UK
@@ -819,7 +837,8 @@ updated_at| TIMESTAMPTZ| NOT NULL
 
 3.5.2 checkpoint_qrs
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 checkpoint_id| UUID| FK checkpoints.id
 token_hash| VARCHAR(255)| UK
@@ -841,7 +860,8 @@ Koordinat dan radius tidak disimpan dalam QR.
 
 Menyimpan kebijakan batas waktu absensi.
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 organization_id| UUID| FK organizations.id, NULL
 unit_id| UUID| FK units.id, NULL
@@ -858,7 +878,8 @@ Policy harus mempunyai aturan prioritas yang jelas jika beberapa policy berlaku 
 
 3.6.2 attendance_sessions
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 user_id| UUID| FK users.id
 profile_type| VARCHAR(20)| NOT NULL
@@ -885,7 +906,8 @@ Aturan:
 
 3.6.3 attendance_events
 
-Kolom| Tipe| Constraint
+| Kolom | Tipe | Constraint |
+| --- | --- | --- |
 id| UUID| PK
 user_id| UUID| FK users.id
 session_id| UUID| FK attendance_sessions.id
@@ -995,7 +1017,8 @@ Nilai konfigurasi disimpan dalam JSONB dan wajib divalidasi berdasarkan schema k
 
 4.1 Identity Relationship
 
-Parent| Child| Relationship
+| Parent | Child | Relationship |
+| --- | --- | --- |
 users| user_sessions| 1:N
 users| user_devices| 1:N
 users| user_roles| 1:N
@@ -1008,7 +1031,8 @@ roles| role_scopes| 1:N
 
 4.2 Personnel Relationship
 
-Parent| Child| Relationship
+| Parent | Child | Relationship |
+| --- | --- | --- |
 users| military_personnel| 1:0..1
 users| persit_members| 1:0..1
 military_personnel| personnel_histories| 1:N
@@ -1018,7 +1042,8 @@ persit_members| family_relationships| 1:N
 
 4.3 Organization Relationship
 
-Parent| Child| Relationship
+| Parent | Child | Relationship |
+| --- | --- | --- |
 organizations| organizations| 1:N self relation
 organizations| units| 1:N
 organizations| barracks| 1:N
@@ -1030,7 +1055,8 @@ barracks| organization_assignments| 1:N
 
 4.4 Attendance Relationship
 
-Parent| Child| Relationship
+| Parent | Child | Relationship |
+| --- | --- | --- |
 users| attendance_sessions| 1:N
 attendance_sessions| attendance_events| 1:N
 users| attendance_events| 1:N
@@ -1042,7 +1068,8 @@ attendance_events| attendance_event_reviews| 1:N
 
 4.5 QR Relationship
 
-Parent| Child| Relationship
+| Parent | Child | Relationship |
+| --- | --- | --- |
 organizations| checkpoints| 1:N
 checkpoints| checkpoint_qrs| 1:N
 
@@ -1384,7 +1411,8 @@ Index yang sudah tercakup oleh unique constraint atau unique index tidak perlu d
 
 9. DELETE & UPDATE POLICY
 
-Tabel| Delete Policy| Update Policy
+| Tabel | Kebijakan penghapusan | Kebijakan perubahan |
+| --- | --- | --- |
 users| Soft delete / deactivate| Controlled
 user_sessions| Revoke / retention| Controlled
 user_devices| Deactivate| Controlled
@@ -1594,4 +1622,4 @@ Tidak diperbolehkan mengubah relasi inti tanpa memperbarui dokumen ERD dan MTS.
 
 Dokumen ini merupakan acuan utama implementasi database MAS.
 
-END OF ERD DOCUMENT
+*Dokumen ERD menjadi baseline desain database MAS dan acuan implementasi PostgreSQL, Prisma Schema, migration, serta akses data backend.*

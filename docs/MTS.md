@@ -1,24 +1,23 @@
-MASTER TECHNICAL SPECIFICATION (MTS)
+# Master Technical Specification (MTS)
 
-MILITARY ATTENDANCE SYSTEM (MAS)
+## Military Attendance System (MAS)
 
-Dokumen: Master Technical Specification
-Nama Sistem: Military Attendance System (MAS)
-Versi Dokumen: 1.0.0
-Status: Final Technical Baseline
-Kategori: Production-Ready System Specification
-Platform: Web Application / Progressive Web Application (PWA)
-Arsitektur: Modular Monolith, Monorepo
-Bahasa: Bahasa Indonesia
-Zona Waktu Operasional: Asia/Jakarta
-Database: PostgreSQL
-Backend: NestJS
-Frontend: Next.js 14
-ORM: Prisma
-Cache: Redis
-Realtime: Socket.IO
-Containerization: Docker
-Operating System: Ubuntu Server
+| Metadata | Nilai |
+| --- | --- |
+| Versi dokumen | 1.0.0 |
+| Status | Baseline teknis rancangan |
+| Platform | Web application / Progressive Web Application (PWA) |
+| Arsitektur | Modular monolith, monorepo |
+| Bahasa dokumen | Bahasa Indonesia |
+| Zona waktu operasional | Asia/Jakarta |
+| Database | PostgreSQL |
+| Backend | NestJS |
+| Frontend | Next.js 14 |
+| ORM | Prisma |
+| Cache | Redis |
+| Realtime | Socket.IO |
+| Containerization | Docker |
+| Sistem operasi | Ubuntu Server |
 
 ---
 
@@ -177,16 +176,18 @@ Frontend tidak diperbolehkan menentukan event type sebagai sumber kebenaran.
 
 Status operasional merupakan hasil evaluasi sesi dan policy.
 
-Status| Definisi
-INSIDE| Tidak memiliki sesi OPEN
-OUTSIDE| Memiliki sesi OPEN dan belum melewati batas waktu
-OVERDUE| Memiliki sesi OPEN dan melewati batas waktu
+| Status | Definisi |
+| --- | --- |
+| INSIDE | Tidak memiliki sesi OPEN |
+| OUTSIDE | Memiliki sesi OPEN dan belum melewati batas waktu |
+| OVERDUE | Memiliki sesi OPEN dan melewati batas waktu |
 
 Status sesi disimpan terpisah:
 
-Status Sesi| Definisi
-OPEN| Sesi keluar belum ditutup
-CLOSED| Sesi telah ditutup melalui RETURN
+| Status sesi | Definisi |
+| --- | --- |
+| OPEN | Sesi keluar belum ditutup |
+| CLOSED | Sesi telah ditutup melalui RETURN |
 
 OVERDUE merupakan status turunan, bukan status transaksi atau status sesi.
 
@@ -208,26 +209,27 @@ Ketentuan:
 
 3.1 Technology Stack
 
-Komponen| Teknologi
-Monorepo| Turborepo
-Frontend| Next.js 14 App Router
-Backend| NestJS
-Bahasa| TypeScript
-Database| PostgreSQL
-ORM| Prisma
-Cache| Redis
-Realtime| Socket.IO
-Authentication| JWT + PIN
-Password Hashing| Argon2id
-QR Generation| QR Code Library
-PDF Generation| PDF Generator
-Location| Browser Geolocation API
-Scanner| Browser Camera API
-Container| Docker
-Reverse Proxy| Nginx
-Operating System| Ubuntu Server
-API Documentation| OpenAPI / Swagger
-Testing| Jest / Supertest / E2E Testing
+| Komponen | Teknologi |
+| --- | --- |
+| Monorepo | Turborepo |
+| Frontend | Next.js 14 App Router |
+| Backend | NestJS |
+| Bahasa | TypeScript |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Cache | Redis |
+| Realtime | Socket.IO |
+| Authentication | JWT + PIN |
+| Password hashing | Argon2id |
+| QR generation | QR Code library |
+| PDF generation | PDF generator |
+| Location | Browser Geolocation API |
+| Scanner | Browser Camera API |
+| Container | Docker |
+| Reverse proxy | Nginx |
+| Sistem operasi | Ubuntu Server |
+| Dokumentasi API | OpenAPI / Swagger |
+| Testing | Jest / Supertest / E2E testing |
 
 Versi dependency harus dikunci menggunakan lockfile dan diuji kompatibilitasnya sebelum deployment. Versi framework yang digunakan wajib mendapatkan dukungan keamanan yang masih berlaku.
 
@@ -809,7 +811,8 @@ Konfigurasi yang memengaruhi status OVERDUE harus mempunyai masa berlaku dan his
 
 14.1 Database Standards
 
-Parameter| Ketentuan
+| Parameter | Ketentuan |
+| --- | --- |
 Database| PostgreSQL
 Primary Key| UUID
 ORM| Prisma
@@ -947,7 +950,8 @@ API wajib menerapkan:
 
 15.2 Authentication API
 
-Method| Endpoint
+| Method | Endpoint |
+| --- | --- |
 POST| /auth/login
 POST| /auth/refresh
 POST| /auth/logout
@@ -960,7 +964,8 @@ POST| /users/:id/reset-pin
 
 15.3 RBAC API
 
-Method| Endpoint
+| Method | Endpoint |
+| --- | --- |
 GET| /roles
 POST| /roles
 PATCH| /roles/:id
@@ -976,7 +981,8 @@ SUPER_ADMIN protected role tidak dapat dihapus melalui operasi biasa.
 
 15.4 Personnel API
 
-Method| Endpoint
+| Method | Endpoint |
+| --- | --- |
 GET| /personnel
 POST| /personnel
 GET| /personnel/:id
@@ -990,7 +996,8 @@ GET| /persit/:id/history
 
 15.5 Checkpoint API
 
-Method| Endpoint
+| Method | Endpoint |
+| --- | --- |
 GET| /checkpoints
 POST| /checkpoints
 GET| /checkpoints/:id
@@ -1001,7 +1008,8 @@ GET| /checkpoints/:id/qr/pdf
 
 15.6 Attendance API
 
-Method| Endpoint
+| Method | Endpoint |
+| --- | --- |
 POST| /attendance/scan
 GET| /attendance/my-status
 GET| /attendance/my-history
@@ -1014,7 +1022,8 @@ POST| /attendance/corrections/:id/reject
 
 15.7 Reporting API
 
-Method| Endpoint
+| Method | Endpoint |
+| --- | --- |
 GET| /reports/attendance
 GET| /reports/overdue
 GET| /reports/personnel
@@ -1209,7 +1218,8 @@ Redis digunakan sebagai adapter apabila deployment menggunakan beberapa instance
 
 Target penerimaan awal:
 
-Kategori| Ketentuan
+| Kategori | Ketentuan |
+| --- | --- |
 API latency| p95 <= 2 detik untuk API normal
 Attendance scan| p95 <= 3 detik setelah GPS tersedia
 Availability| Target 99,5% per bulan
@@ -1353,7 +1363,7 @@ Format error response:
   "requestId": "REQUEST-UUID"
 }
 
-Kode error standar:
+Kode error standar mengikuti katalog pada dokumen API:
 
 - AUTH_INVALID_CREDENTIALS.
 - ACCOUNT_INACTIVE.
@@ -1363,9 +1373,10 @@ Kode error standar:
 - QR_INVALID.
 - QR_REVOKED.
 - CHECKPOINT_INACTIVE.
-- LOCATION_OUTSIDE_GEOFENCE.
-- GPS_ACCURACY_INSUFFICIENT.
 - GPS_UNAVAILABLE.
+- GPS_INVALID.
+- GPS_ACCURACY_INSUFFICIENT.
+- LOCATION_OUTSIDE_GEOFENCE.
 - ATTENDANCE_SESSION_ALREADY_OPEN.
 - ATTENDANCE_SESSION_NOT_OPEN.
 - DUPLICATE_REQUEST.

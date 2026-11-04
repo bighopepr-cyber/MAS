@@ -1,18 +1,20 @@
-Military Attendance System (MAS)
+# API Documentation
 
-API Documentation
+## Military Attendance System (MAS)
 
-Versi: 1.0.0
-Status: Draft
-Base Path: "/api/v1"
-Backend: NestJS
-Database: PostgreSQL
-ORM: Prisma
-Authentication: JWT + NRP/Username + PIN
+| Metadata | Nilai |
+| --- | --- |
+| Versi | 1.0.0 |
+| Status | Draft kontrak API |
+| Base path | `/api/v1` |
+| Backend | NestJS |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Autentikasi | JWT + NRP/username + PIN |
 
 ---
 
-1. Pendahuluan
+## 1. Pendahuluan
 
 Dokumen ini menjelaskan rancangan REST API untuk Military Attendance System (MAS).
 
@@ -29,7 +31,7 @@ API digunakan untuk mengelola:
 9. Dashboard & Reporting
 10. System & Organization Management
 
-1.1 Prinsip API
+### 1.1 Prinsip API
 
 - Seluruh API menggunakan prefix "/api/v1".
 - Format request dan response menggunakan JSON, kecuali endpoint ekspor atau unduh dokumen.
@@ -45,9 +47,9 @@ API digunakan untuk mengelola:
 
 ---
 
-2. Konvensi API
+## 2. Konvensi API
 
-2.1 Base URL
+### 2.1 Base URL
 
 Development:
 
@@ -57,53 +59,57 @@ Production:
 
 https://mas.example.mil.id/api/v1
 
-2.2 HTTP Methods
+### 2.2 HTTP Methods
 
-Method| Fungsi
-GET| Mengambil data
-POST| Membuat data atau menjalankan proses
-PATCH| Mengubah sebagian data
-PUT| Mengganti data
-DELETE| Menghapus atau menonaktifkan data
+| Method | Fungsi |
+| --- | --- |
+| GET | Mengambil data |
+| POST | Membuat data atau menjalankan proses |
+| PATCH | Mengubah sebagian data |
+| PUT | Mengganti data |
+| DELETE | Menghapus atau menonaktifkan data |
 
-2.3 Format Response Sukses
+### 2.3 Format Respons Sukses
 
 {
   "success": true,
   "message": "Data berhasil diambil",
   "data": {},
-  "meta": null
+  "meta": null,
+  "requestId": "REQUEST-UUID"
 }
 
-2.4 Format Response Error
+### 2.4 Format Respons Error
 
 {
   "success": false,
   "message": "Data tidak ditemukan",
   "error": {
     "code": "RESOURCE_NOT_FOUND",
-    "details": []
+    "details": {}
   },
   "timestamp": "2026-11-05T00:00:00.000Z",
-  "path": "/api/v1/users/123"
+  "path": "/api/v1/users/123",
+  "requestId": "REQUEST-UUID"
 }
 
-2.5 HTTP Status Code
+### 2.5 HTTP Status Code
 
-Status| Keterangan
-200| Berhasil
-201| Data berhasil dibuat
-204| Berhasil tanpa response body
-400| Request tidak valid
-401| Belum terautentikasi
-403| Tidak memiliki izin
-404| Data tidak ditemukan
-409| Konflik data atau transaksi duplikat
-422| Validasi bisnis gagal
-429| Terlalu banyak request
-500| Kesalahan server
+| Status | Keterangan |
+| --- | --- |
+| 200 | Berhasil |
+| 201 | Data berhasil dibuat |
+| 204 | Berhasil tanpa body respons |
+| 400 | Request tidak valid |
+| 401 | Belum terautentikasi |
+| 403 | Tidak memiliki izin |
+| 404 | Data tidak ditemukan |
+| 409 | Konflik data atau transaksi duplikat |
+| 422 | Validasi bisnis gagal |
+| 429 | Terlalu banyak request |
+| 500 | Kesalahan server |
 
-2.6 Pagination
+### 2.6 Pagination
 
 Endpoint list menggunakan parameter:
 
@@ -123,7 +129,7 @@ Response:
   }
 }
 
-2.7 Authentication Header
+### 2.7 Authentication Header
 
 Endpoint yang membutuhkan autentikasi menggunakan:
 
@@ -131,11 +137,11 @@ Authorization: Bearer <access_token>
 
 ---
 
-3. Authentication & Identity API
+## 3. Authentication & Identity API
 
 Base path: "/auth"
 
-3.1 Login
+### 3.1 Login
 
 POST "/auth/login"
 
@@ -193,7 +199,7 @@ Catatan:
 - Akun yang tidak aktif harus ditolak.
 - Login gagal dicatat dalam security log.
 
-3.2 Refresh Token
+### 3.2 Refresh Token
 
 POST "/auth/refresh"
 
@@ -217,7 +223,7 @@ Response:
 
 Gunakan refresh token rotation dan invalidasi token lama setelah berhasil digunakan.
 
-3.3 Logout
+### 3.3 Logout
 
 POST "/auth/logout"
 
@@ -235,7 +241,7 @@ Response:
   "data": null
 }
 
-3.4 Logout All Devices
+### 3.4 Logout All Devices
 
 POST "/auth/logout-all"
 
@@ -245,7 +251,7 @@ Permission:
 
 auth.session.revoke.all
 
-3.5 Get Current User
+### 3.5 Get Current User
 
 GET "/users/me"
 
@@ -282,11 +288,11 @@ Permission:
 
 auth.pin.change
 
-3.7 Forgot or Reset PIN
+### 3.7 Reset PIN Pengguna
 
-POST "/auth/reset-pin"
+POST "/users/:id/reset-pin"
 
-Proses reset PIN harus mengikuti kebijakan verifikasi identitas dan otorisasi administrator. Jangan mengembalikan PIN lama melalui API.
+Reset PIN oleh administrator harus mengikuti kebijakan verifikasi identitas dan otorisasi. Pengguna yang ingin mengganti PIN sendiri menggunakan `PATCH /auth/change-pin`. API tidak boleh mengembalikan PIN lama atau PIN baru.
 
 ---
 
@@ -667,8 +673,9 @@ Base path: "/organizations"
 
 8.1 Organizations
 
-Method| Endpoint| Fungsi
-GET| "/organizations"| Daftar organisasi
+| Method | Endpoint | Fungsi |
+| --- | --- | --- |
+| GET | `/organizations` | Daftar organisasi |
 POST| "/organizations"| Membuat organisasi
 GET| "/organizations/:id"| Detail organisasi
 PATCH| "/organizations/:id"| Update organisasi
@@ -678,7 +685,8 @@ DELETE| "/organizations/:id"| Menonaktifkan organisasi
 
 Base path: "/units"
 
-Method| Endpoint| Fungsi
+| Method | Endpoint | Fungsi |
+| --- | --- | --- |
 GET| "/units"| Daftar satuan
 POST| "/units"| Membuat satuan
 GET| "/units/:id"| Detail satuan
@@ -689,7 +697,8 @@ DELETE| "/units/:id"| Menonaktifkan satuan
 
 Base path: "/barracks"
 
-Method| Endpoint| Fungsi
+| Method | Endpoint | Fungsi |
+| --- | --- | --- |
 GET| "/barracks"| Daftar barak
 POST| "/barracks"| Membuat barak
 GET| "/barracks/:id"| Detail barak
@@ -1436,7 +1445,8 @@ notification.create
 
 19.5 Manage Notification Templates
 
-Method| Endpoint| Fungsi
+| Method | Endpoint | Fungsi |
+| --- | --- | --- |
 GET| "/notification-templates"| Daftar template
 POST| "/notification-templates"| Membuat template
 PATCH| "/notification-templates/:id"| Update template
@@ -1542,11 +1552,7 @@ POST /attendance/scan
 POST /checkpoints/:id/qr
 POST /attendance/corrections
 
-Untuk transaksi kehadiran, client mengirim:
-
-Idempotency-Key: UNIQUE-REQUEST-ID
-
-atau mengirim "idempotencyKey" di request body. Pilih satu mekanisme secara konsisten pada implementasi final.
+Untuk transaksi kehadiran, client mengirim `idempotencyKey` di request body. Backend menyimpan dan memvalidasi key tersebut bersama transaksi.
 
 Aturan:
 
@@ -1633,29 +1639,30 @@ Aturan ini berlaku secara independen untuk setiap akun Prajurit dan Persit.
 
 ---
 
-25. Error Codes
+## 25. Kode Error
 
-Code| HTTP| Keterangan
-"INVALID_CREDENTIALS"| 401| Login gagal
-"ACCOUNT_INACTIVE"| 403| Akun tidak aktif
-"TOKEN_EXPIRED"| 401| JWT kedaluwarsa
-"INSUFFICIENT_PERMISSION"| 403| Tidak memiliki permission
-"OUT_OF_SCOPE"| 403| Di luar organizational scope
-"RESOURCE_NOT_FOUND"| 404| Data tidak ditemukan
-"QR_INVALID"| 422| QR tidak valid
-"QR_REVOKED"| 422| QR telah dicabut
-"CHECKPOINT_INACTIVE"| 422| Checkpoint tidak aktif
-"GPS_REQUIRED"| 422| Lokasi wajib dikirim
-"GPS_INVALID"| 422| Koordinat tidak valid
-"GPS_INACCURATE"| 422| Akurasi GPS tidak memenuhi batas
-"OUTSIDE_GEOFENCE"| 422| Di luar radius checkpoint
-"DUPLICATE_REQUEST"| 409| Request duplikat
-"OPEN_SESSION_EXISTS"| 409| Sesi EXIT sudah terbuka
-"NO_OPEN_SESSION"| 409| Tidak ada sesi yang dapat ditutup
-"CORRECTION_NOT_ALLOWED"| 422| Koreksi tidak diperbolehkan
-"VALIDATION_FAILED"| 400| Validasi request gagal
-"RATE_LIMIT_EXCEEDED"| 429| Batas request terlampaui
-"INTERNAL_ERROR"| 500| Kesalahan internal
+| Code | HTTP | Keterangan |
+| --- | --- | --- |
+| `AUTH_INVALID_CREDENTIALS` | 401 | Login gagal |
+| `ACCOUNT_INACTIVE` | 403 | Akun tidak aktif |
+| `TOKEN_EXPIRED` | 401 | JWT kedaluwarsa |
+| `PERMISSION_DENIED` | 403 | Tidak memiliki permission |
+| `ORGANIZATION_SCOPE_DENIED` | 403 | Di luar organizational scope |
+| `RESOURCE_NOT_FOUND` | 404 | Data tidak ditemukan |
+| `QR_INVALID` | 422 | QR tidak valid |
+| `QR_REVOKED` | 422 | QR telah dicabut |
+| `CHECKPOINT_INACTIVE` | 422 | Checkpoint tidak aktif |
+| `GPS_UNAVAILABLE` | 422 | Lokasi tidak tersedia |
+| `GPS_INVALID` | 422 | Koordinat tidak valid |
+| `GPS_ACCURACY_INSUFFICIENT` | 422 | Akurasi GPS tidak memenuhi batas |
+| `LOCATION_OUTSIDE_GEOFENCE` | 422 | Di luar radius checkpoint |
+| `DUPLICATE_REQUEST` | 409 | Request duplikat |
+| `ATTENDANCE_SESSION_ALREADY_OPEN` | 409 | Sesi keluar sudah terbuka |
+| `ATTENDANCE_SESSION_NOT_OPEN` | 409 | Tidak ada sesi yang dapat ditutup |
+| `CORRECTION_NOT_ALLOWED` | 422 | Koreksi tidak diperbolehkan |
+| `VALIDATION_ERROR` | 400 | Validasi request gagal |
+| `RATE_LIMIT_EXCEEDED` | 429 | Batas request terlampaui |
+| `INTERNAL_SERVER_ERROR` | 500 | Kesalahan internal |
 
 ---
 
