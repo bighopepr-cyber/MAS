@@ -1013,7 +1013,7 @@ Nilai konfigurasi disimpan dalam JSONB dan wajib divalidasi berdasarkan schema k
 
 ---
 
-4. DATABASE RELATIONSHIP DETAILS
+## 4. Database Relationship Details
 
 4.1 Identity Relationship
 
@@ -1275,7 +1275,7 @@ Konsistensi antara event, session, user, dan profile_type wajib divalidasi dalam
 
 ---
 
-7. DATA INTEGRITY RULES
+## 7. Data Integrity Rules
 
 7.1 User Profile Integrity
 
@@ -1345,7 +1345,7 @@ Aturan:
 
 ---
 
-8. INDEXING STRATEGY
+## 8. Indexing Strategy
 
 Index wajib untuk mendukung query operasional.
 
@@ -1485,7 +1485,7 @@ flowchart TD
 
 ---
 
-11. DATABASE SECURITY
+## 11. Database Security
 
 11.1 Database Access
 
@@ -1521,7 +1521,7 @@ Untuk kebutuhan perlindungan lebih tinggi, gunakan penyimpanan audit terpisah, a
 
 ---
 
-12. PRISMA IMPLEMENTATION NOTES
+## 12. Prisma Implementation Notes
 
 Prisma Schema harus mengikuti struktur ERD ini.
 
@@ -1551,7 +1551,7 @@ Constraint lintas tabel yang tidak dapat dinyatakan langsung melalui Prisma haru
 
 ---
 
-13. DATABASE MIGRATION REQUIREMENTS
+## 13. Database Migration Requirements
 
 Setiap migration wajib:
 
@@ -1582,7 +1582,7 @@ Nama migration merupakan contoh pengelompokan; urutan sebenarnya harus mengikuti
 
 ---
 
-14. ERD ACCEPTANCE CRITERIA
+## 14. ERD Acceptance Criteria
 
 Database dinyatakan memenuhi ERD apabila:
 
@@ -1612,7 +1612,7 @@ Database dinyatakan memenuhi ERD apabila:
 
 ---
 
-15. FINAL DATABASE DECLARATION
+## 15. Final Database Declaration
 
 Dokumen ERD ini menjadi baseline desain relasional database Military Attendance System (MAS).
 

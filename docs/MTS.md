@@ -313,7 +313,7 @@ mas/
 
 ---
 
-4. MODUL 01 — IDENTITY & ACCESS MANAGEMENT
+## 4. Modul 01 — Identity & Access Management
 
 4.1 Fungsi
 
@@ -401,7 +401,7 @@ SUPER_ADMIN:
 
 ---
 
-5. MODUL 02 — MILITARY PERSONNEL MANAGEMENT
+## 5. Modul 02 — Military Personnel Management
 
 Modul mengelola data Prajurit.
 
@@ -437,7 +437,7 @@ Perubahan data sensitif harus dicatat dalam audit log.
 
 ---
 
-6. MODUL 03 — PERSIT MANAGEMENT
+## 6. Modul 03 — Persit Management
 
 Modul mengelola data keanggotaan Persit secara independen.
 
@@ -468,7 +468,7 @@ Persit tidak otomatis mendapatkan permission hanya karena mempunyai profil Persi
 
 ---
 
-7. MODUL 04 — ATTENDANCE MANAGEMENT
+## 7. Modul 04 — Attendance Management
 
 7.1 Fungsi
 
@@ -576,7 +576,7 @@ Satu user hanya boleh memiliki satu session OPEN.
 
 ---
 
-8. MODUL 05 — QR CODE & CHECKPOINT MANAGEMENT
+## 8. Modul 05 — QR Code & Checkpoint Management
 
 8.1 Checkpoint
 
@@ -624,7 +624,7 @@ PDF hanya boleh dihasilkan oleh pengguna dengan permission yang sesuai.
 
 ---
 
-9. MODUL 06 — LOCATION & PRESENCE VERIFICATION
+## 9. Modul 06 — Location & Presence Verification
 
 9.1 Geofence Engine
 
@@ -668,7 +668,7 @@ Lokasi hanya digunakan untuk validasi transaksi, investigasi yang berwenang, dan
 
 ---
 
-10. MODUL 07 — SECURITY & ANOMALY DETECTION
+## 10. Modul 07 — Security & Anomaly Detection
 
 Fungsi:
 
@@ -701,7 +701,7 @@ Keputusan tersebut ditentukan berdasarkan policy yang dapat diaudit.
 
 ---
 
-11. MODUL 08 — AUDIT & ACTIVITY MANAGEMENT
+## 11. Modul 08 — Audit & Activity Management
 
 Semua tindakan kritis harus dicatat.
 
@@ -735,7 +735,7 @@ Audit log penting harus dilindungi dari modifikasi dan penghapusan oleh akun ope
 
 ---
 
-12. MODUL 09 — DASHBOARD & REPORTING
+## 12. Modul 09 — Dashboard & Reporting
 
 12.1 Dashboard
 
@@ -786,7 +786,7 @@ Setiap koneksi wajib terautentikasi dan hanya menerima data sesuai permission da
 
 ---
 
-13. MODUL 10 — SYSTEM & ORGANIZATION MANAGEMENT
+## 13. Modul 10 — System & Organization Management
 
 Data organisasi meliputi:
 
@@ -807,7 +807,7 @@ Konfigurasi yang memengaruhi status OVERDUE harus mempunyai masa berlaku dan his
 
 ---
 
-14. DATABASE SPECIFICATION
+## 14. Database Specification
 
 14.1 Database Standards
 
@@ -924,7 +924,7 @@ Sistem wajib menjamin:
 
 ---
 
-15. API SPECIFICATION
+## 15. API Specification
 
 15.1 API Standard
 
@@ -1069,7 +1069,7 @@ Timestamp resmi diambil dari server, bukan dari request client.
 
 ---
 
-16. FRONTEND SPECIFICATION
+## 16. Frontend Specification
 
 16.1 Framework
 
@@ -1131,7 +1131,7 @@ Transaksi tidak boleh dinyatakan berhasil hanya karena tersimpan secara lokal.
 
 ---
 
-17. SECURITY SPECIFICATION
+## 17. Security Specification
 
 17.1 Authentication Security
 
@@ -1188,25 +1188,24 @@ Operasi kritis harus menyimpan actor, waktu, target, alasan, dan hasil.
 
 ---
 
-18. REALTIME SPECIFICATION
+## 18. Realtime Specification
 
 Socket.IO digunakan untuk pembaruan dashboard.
 
-Event:
+Event Socket.IO menggunakan nama yang sama dengan katalog pada dokumen API:
 
-attendance.exit
-attendance.return
-attendance.status.updated
-attendance.overdue
-attendance.correction.submitted
-attendance.correction.approved
-
-checkpoint.created
-checkpoint.updated
-checkpoint.qr.revoked
-
-security.alert.created
-security.incident.updated
+- `attendance:exit`
+- `attendance:return`
+- `attendance:status-updated`
+- `attendance:overdue`
+- `attendance:correction-submitted`
+- `attendance:correction-approved`
+- `checkpoint:created`
+- `checkpoint:updated`
+- `checkpoint:qr-revoked`
+- `security:alert-created`
+- `security:incident-updated`
+- `notification:new`
 
 Setiap koneksi harus terautentikasi dan memiliki authorization untuk room yang diakses.
 
@@ -1214,7 +1213,7 @@ Redis digunakan sebagai adapter apabila deployment menggunakan beberapa instance
 
 ---
 
-19. PERFORMANCE & NON-FUNCTIONAL REQUIREMENTS
+## 19. Performance & Non-functional Requirements
 
 Target penerimaan awal:
 
@@ -1235,7 +1234,7 @@ Target tersebut wajib dibuktikan melalui pengujian pada kapasitas dan lingkungan
 
 ---
 
-20. INFRASTRUCTURE & DEPLOYMENT SPECIFICATION
+## 20. Infrastructure & Deployment Specification
 
 20.1 Production Components
 
@@ -1317,7 +1316,7 @@ Health readiness harus memeriksa dependency penting seperti database dan Redis s
 
 ---
 
-21. DATA GOVERNANCE & PRIVACY
+## 21. Data Governance & Privacy
 
 Data yang diproses:
 
@@ -1387,7 +1386,7 @@ Detail internal, stack trace, secret, dan informasi sensitif tidak boleh dikirim
 
 ---
 
-23. DATA CORRECTION & RECORD IMMUTABILITY
+## 23. Data Correction & Record Immutability
 
 Attendance Event bersifat immutable setelah berhasil disimpan.
 
@@ -1407,7 +1406,7 @@ Koreksi tidak boleh menghapus jejak transaksi awal.
 
 ---
 
-24. TESTING & ACCEPTANCE REQUIREMENTS
+## 24. Testing & Acceptance Requirements
 
 Sebelum release produksi, seluruh persyaratan berikut harus lulus.
 
@@ -1480,7 +1479,7 @@ Hasil yang diharapkan:
 
 ---
 
-25. PRODUCTION ACCEPTANCE CRITERIA
+## 25. Production Acceptance Criteria
 
 Produk MAS hanya dapat dinyatakan siap deployment dan siap operasional apabila seluruh ketentuan berikut terpenuhi:
 
@@ -1511,7 +1510,7 @@ Produk MAS hanya dapat dinyatakan siap deployment dan siap operasional apabila s
 
 ---
 
-26. SYSTEM CONFIGURATION
+## 26. System Configuration
 
 Parameter berikut wajib dikelola melalui konfigurasi sistem, bukan nilai hardcoded:
 
@@ -1535,7 +1534,7 @@ Setiap perubahan konfigurasi kritis harus dicatat dalam audit log dan memiliki i
 
 ---
 
-27. GLOSSARY
+## 27. Glossary
 
 Istilah| Definisi
 MAS| Military Attendance System
@@ -1563,9 +1562,9 @@ PWA| Progressive Web Application
 
 ---
 
-28. FINAL TECHNICAL DECLARATION
+## 28. Final Technical Declaration
 
-Dokumen Master Technical Specification ini merupakan baseline teknis final untuk implementasi Military Attendance System.
+Dokumen Master Technical Specification ini merupakan baseline rancangan teknis untuk implementasi Military Attendance System. Status siap produksi hanya dapat ditetapkan setelah seluruh kriteria pengujian dan penerimaan pada dokumen ini terpenuhi.
 
 Seluruh komponen aplikasi, database, API, keamanan, workflow, dan infrastruktur wajib mengikuti ketentuan yang tercantum dalam dokumen ini.
 

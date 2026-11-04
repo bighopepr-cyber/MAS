@@ -296,7 +296,7 @@ Reset PIN oleh administrator harus mengikuti kebijakan verifikasi identitas dan 
 
 ---
 
-4. Dynamic RBAC API
+## 4. Dynamic RBAC API
 
 Base path: "/roles", "/permissions", "/users"
 
@@ -479,7 +479,7 @@ Setiap perubahan RBAC harus diaudit dan mengakibatkan invalidasi cache permissio
 
 ---
 
-5. User Management API
+## 5. User Management API
 
 Base path: "/users"
 
@@ -535,7 +535,7 @@ SUPER_ADMIN tidak boleh dinonaktifkan melalui endpoint biasa. Perubahan akun SUP
 
 ---
 
-6. Military Personnel API
+## 6. Military Personnel API
 
 Base path: "/personnel"
 
@@ -604,7 +604,7 @@ Perubahan organisasi harus mempertahankan riwayat penempatan sebelumnya.
 
 ---
 
-7. Persit Management API
+## 7. Persit Management API
 
 Base path: "/persit"
 
@@ -667,7 +667,7 @@ Penghapusan hubungan keluarga tidak menghapus akun atau riwayat kehadiran Persit
 
 ---
 
-8. Organization Management API
+## 8. Organization Management API
 
 Base path: "/organizations"
 
@@ -709,7 +709,7 @@ Semua endpoint organisasi wajib menerapkan organizational scope sesuai role peng
 
 ---
 
-9. Checkpoint Management API
+## 9. Checkpoint Management API
 
 Base path: "/checkpoints"
 
@@ -769,7 +769,7 @@ Mengambil informasi QR aktif tanpa mengembalikan token mentah.
 
 ---
 
-10. QR Code Management API
+## 10. QR Code Management API
 
 Base path: "/checkpoints/:id/qr"
 
@@ -874,7 +874,7 @@ Jangan mengembalikan koordinat internal, token hash, atau informasi sensitif che
 
 ---
 
-11. Attendance Management API
+## 11. Attendance Management API
 
 Base path: "/attendance"
 
@@ -1096,7 +1096,7 @@ Query:
 
 ---
 
-12. Attendance Correction API
+## 12. Attendance Correction API
 
 Data event kehadiran tidak boleh diubah langsung.
 
@@ -1158,7 +1158,7 @@ Approval harus dilakukan oleh pengguna yang berwenang dan tidak boleh dilakukan 
 
 ---
 
-13. Attendance Policy API
+## 13. Attendance Policy API
 
 Base path: "/attendance-policies"
 
@@ -1198,7 +1198,7 @@ Kebijakan dapat berbeda berdasarkan organisasi, satuan, atau tipe profil. Aturan
 
 ---
 
-14. User Device API
+## 14. User Device API
 
 Base path: "/devices"
 
@@ -1235,7 +1235,7 @@ Device ID yang dikirim frontend bukan bukti identitas perangkat yang tidak dapat
 
 ---
 
-15. Dashboard API
+## 15. Dashboard API
 
 Base path: "/dashboard"
 
@@ -1286,7 +1286,7 @@ GET "/dashboard/security-overview"
 
 ---
 
-16. Reporting API
+## 16. Reporting API
 
 Base path: "/reports"
 
@@ -1332,7 +1332,7 @@ Export wajib mengikuti organizational scope dan permission pengguna.
 
 ---
 
-17. Security & Anomaly Detection API
+## 17. Security & Anomaly Detection API
 
 Base path: "/security"
 
@@ -1389,7 +1389,7 @@ Sinyal tersebut merupakan indikator risiko, bukan bukti otomatis adanya pelangga
 
 ---
 
-18. Audit API
+## 18. Audit API
 
 Base path: "/audit"
 
@@ -1419,7 +1419,7 @@ Digunakan untuk melihat aktivitas login, logout, kegagalan autentikasi, dan peru
 
 ---
 
-19. Notification API
+## 19. Notification API
 
 Base path: "/notifications"
 
@@ -1454,7 +1454,7 @@ DELETE| "/notification-templates/:id"| Menonaktifkan template
 
 ---
 
-20. System Settings API
+## 20. System Settings API
 
 Base path: "/system-settings"
 
@@ -1496,7 +1496,7 @@ Endpoint health detail sebaiknya dibatasi untuk administrator dan monitoring int
 
 ---
 
-21. Realtime API - Socket.IO
+## 21. Realtime API - Socket.IO
 
 Selain REST API, MAS menggunakan Socket.IO untuk memperbarui dashboard secara realtime.
 
@@ -1518,13 +1518,20 @@ Server harus memvalidasi token, status akun, permission, dan scope sebelum mengi
 
 21.2 Event dari Server
 
-Event| Keterangan
-"attendance:new"| Transaksi kehadiran baru
-"attendance:updated"| Perubahan status kehadiran
-"attendance:overdue"| Pengguna melewati deadline
-"checkpoint:status"| Status checkpoint berubah
-"security:alert"| Peringatan keamanan
-"notification:new"| Notifikasi baru
+| Event | Keterangan |
+| --- | --- |
+| `attendance:exit` | Transaksi EXIT tercatat |
+| `attendance:return` | Transaksi RETURN tercatat |
+| `attendance:status-updated` | Status kehadiran berubah |
+| `attendance:overdue` | Pengguna melewati deadline |
+| `attendance:correction-submitted` | Koreksi kehadiran diajukan |
+| `attendance:correction-approved` | Koreksi kehadiran disetujui |
+| `checkpoint:created` | Checkpoint dibuat |
+| `checkpoint:updated` | Checkpoint diperbarui |
+| `checkpoint:qr-revoked` | QR checkpoint dicabut |
+| `security:alert-created` | Peringatan keamanan tercatat |
+| `security:incident-updated` | Insiden keamanan diperbarui |
+| `notification:new` | Notifikasi baru |
 
 21.3 Contoh Payload
 
@@ -1570,7 +1577,7 @@ WHERE status = 'OPEN';
 
 ---
 
-23. Geofence Validation Rules
+## 23. Geofence Validation Rules
 
 Setiap transaksi EXIT dan RETURN wajib menjalankan validasi lokasi.
 
@@ -1612,7 +1619,7 @@ Jangan mempercayai hasil jarak dari frontend. Perhitungan dilakukan ulang di bac
 
 ---
 
-24. Attendance Resolver Rules
+## 24. Attendance Resolver Rules
 
 Backend menentukan event berdasarkan sesi OPEN pengguna.
 
@@ -1666,7 +1673,7 @@ Aturan ini berlaku secara independen untuk setiap akun Prajurit dan Persit.
 
 ---
 
-26. Security Requirements
+## 26. Security Requirements
 
 Implementasi API wajib menerapkan:
 
@@ -1690,7 +1697,7 @@ Implementasi API wajib menerapkan:
 
 ---
 
-27. NestJS Module Mapping
+## 27. NestJS Module Mapping
 
 Struktur implementasi API yang direkomendasikan:
 
@@ -1734,7 +1741,7 @@ apps/api/src/
 
 ---
 
-28. API Implementation Priority
+## 28. API Implementation Priority
 
 Urutan pengembangan yang direkomendasikan:
 
@@ -1754,7 +1761,7 @@ Tahap| Modul| Prioritas
 
 ---
 
-29. Acceptance Criteria
+## 29. Acceptance Criteria
 
 API dianggap memenuhi rancangan awal apabila:
 
@@ -1780,7 +1787,7 @@ API dianggap memenuhi rancangan awal apabila:
 
 ---
 
-30. Catatan Keputusan Implementasi
+## 30. Catatan Keputusan Implementasi
 
 Dokumentasi ini merupakan kontrak API awal. Sebelum implementasi production, beberapa detail perlu ditetapkan lebih lanjut:
 
